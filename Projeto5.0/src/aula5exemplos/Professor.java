@@ -60,4 +60,8 @@ public class Professor {
         this.areas = areas;
     }
     
+    public Professor(){
+        
+    }
+    
 }

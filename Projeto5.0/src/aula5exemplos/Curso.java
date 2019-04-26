@@ -56,5 +56,9 @@ public class Curso {
         this.nome = nome;
         this.ppc = ppc;
     }
+    
+    public Curso(){
+        
+    }
 }
 

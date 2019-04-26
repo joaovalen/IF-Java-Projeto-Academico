@@ -12,12 +12,24 @@ public class SetorEnsino {
     private Professor professores[];
     private String diretor;
     private String coordenador;
-
+    
+    
+    //////////////////////////// PROFESSOR /////////////////////////////////////
+    
     public boolean novoProfessor(String nome, long siape, String[] areas) {
         for (int i = 0; i < professores.length; i++) {
             if (professores[i] == null) {
                 professores[i] = new Professor(nome, siape, areas);
-                System.out.println("Professor " + professores[i].getNome() + " cadastrado com sucesso");
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean novoProfessor(Professor p) {
+        for (int i = 0; i < professores.length; i++) {
+            if (professores[i] == null) {
+                professores[i] = p;
                 return true;
             }
         }
@@ -33,12 +45,32 @@ public class SetorEnsino {
         }
         return false;
     }
+    
+    public Professor encontraProfessor(long siape) {
+        for (Professor prof : professores) {
+            if (prof.getSiape() == siape) {
+                return prof;
+            }
+        }
+        return null;
+    }
 
+    /////////////////////////// CURSO //////////////////////////////////////////
+    
     public boolean novoCurso(String nome, String ppc) {
         for (int i = 0; i < cursos.length; i++) {
             if (cursos[i] == null) {
                 cursos[i] = new Curso(nome, ppc);
-                System.out.println("Curso " + cursos[i].getNome() + " Cadastrado com sucesso");
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean novoCurso(Curso c) {
+        for (int i = 0; i < getCursos().length; i++) {
+            if (getCursos()[i] == null) {
+                getCursos()[i] = c;
                 return true;
             }
         }
@@ -55,6 +87,19 @@ public class SetorEnsino {
         }
         return false;
     }
+    
+    public Curso encontraCurso(String nome){
+        if (cursos != null) {
+            for (Curso curso : cursos) {
+                if (curso != null && curso.getNome().equals(nome)) {
+                    return curso;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /////////////////////////// ALUNO //////////////////////////////////////////
 
     public boolean novoAluno(String nome, long matricula, long anoIngresso) {
         for (int i = 0; i < alunos.length; i++) {
@@ -76,15 +121,8 @@ public class SetorEnsino {
         return false;
     }
 
-    public Professor encontraProfessor(long siape) {
-        for (Professor prof : professores) {
-            if (prof.getSiape() == siape) {
-                return prof;
-            }
-        }
-        return null;
-    }
-    
+    ////////////////////////// DISCIPLINA //////////////////////////////////////
+ 
     public Disciplina encontraDisciplina(String disciplina, Curso curso){
         if (curso != null && curso.getDisciplinas() != null){
             for (Disciplina disc : curso.getDisciplinas()){
@@ -96,17 +134,6 @@ public class SetorEnsino {
         return null;
     }
     
-    public Curso encontraCurso(String nome){
-        if (cursos != null) {
-            for (Curso curso : cursos) {
-                if (curso != null && curso.getNome().equals(nome)) {
-                    return curso;
-                }
-            }
-        }
-        return null;
-    }
-
     public boolean criaDisciplina(String nome, int ano, long siape, String curso) {
         for (Curso c : cursos) {
             if (c != null && c.getNome().equals(curso)) {
@@ -149,9 +176,7 @@ public class SetorEnsino {
         }       
     }
     
-    public void salvaNotas(float[] notas,
-            Curso curso,
-            Disciplina disciplina) {
+    public void salvaNotas(float[] notas,Curso curso,Disciplina disciplina) {
         for (Curso c : cursos) {
             if (c.equals(curso)) {
                 for (Disciplina d : c.getDisciplinas()) {
@@ -163,8 +188,7 @@ public class SetorEnsino {
         }
     }
     
-    
-    
+    ////////////////////////// GET/SET /////////////////////////////////////////
     
     public Disciplina[] getDisciplinas() {
         return disciplinas;
@@ -203,6 +227,8 @@ public class SetorEnsino {
         this.coordenador = coordenador;
     }
     
+    ////////////////////////// CONSTRUTORES ////////////////////////////////////
+    
      public SetorEnsino(String diretor, String coordenador) {
         this.coordenador = coordenador;
         this.diretor = diretor;
@@ -221,6 +247,8 @@ public class SetorEnsino {
         this.coordenador = coordenador;
     }
     
+    ////////////////////////// LEITURA /////////////////////////////////////////
+    
      private static String inputString(){
         Scanner sc = new Scanner(System.in);
         String x = sc.nextLine();
@@ -230,6 +258,12 @@ public class SetorEnsino {
      private static Float inputFloat(){
          Scanner sc = new Scanner(System.in);
          float x = sc.nextFloat();
+         return x;
+     }
+     
+      private static int inputInt(){
+         Scanner sc = new Scanner(System.in);
+         int x = sc.nextInt();
          return x;
      }
 }

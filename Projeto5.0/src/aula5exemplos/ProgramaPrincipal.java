@@ -11,10 +11,11 @@ import java.util.Scanner;
 
 public class ProgramaPrincipal {
     
+    //////////////////////////////// MENU PRINCIPAL ////////////////////////////
     
     public static void main(String[] args) throws IOException {
         SetorEnsino ensino = new SetorEnsino("Pâmela Perini", "Vitor Valente");
-        Professor professor = new Professor("Coelho",1);
+        Aluno[] alunos = new Aluno[1000];
         int opcao = 4;
         
         do {
@@ -27,7 +28,7 @@ public class ProgramaPrincipal {
                     menu_professor("MENU 2: \n [1] Dar Notas de uma disciplina [2] Alterar uma nota [3] Adicionar Área [4] Remover Área",ensino);
                     break;
                 case 3:
-                    menu_ensino("MENU 2: \n [1] Cadastrar Aluno [2] Cadastrar Curso [3] Adicionar Disciplina ao Curso [4] Cadastrar Professor", ensino);
+                    menu_ensino("MENU 2: \n [1] Cadastrar Aluno [2] Cadastrar Curso [3] Adicionar Disciplina ao Curso [4] Cadastrar Professor", ensino,alunos);
             }
         } while (opcao != 4);
     }
@@ -40,6 +41,7 @@ public class ProgramaPrincipal {
         return opcao;
     }
 
+    ////////////////////////////// MENU ALUNOS /////////////////////////////////
     private static void menu_alunos(String opcoes,SetorEnsino ensino) throws IOException {
         int opcao = menu(opcoes);
         switch (opcao) {
@@ -56,6 +58,8 @@ public class ProgramaPrincipal {
         }
     }
 
+    //////////////////////////// MENU PROFESSOR ////////////////////////////////
+    
     private static void menu_professor(String opcoes, SetorEnsino ensino) throws IOException {
         int opcao = menu(opcoes);
         
@@ -71,19 +75,15 @@ public class ProgramaPrincipal {
 
     }
 
-    private static void menu_ensino(String opcoes, SetorEnsino ensino) throws IOException {
+    ///////////////////////// MENU ENSINO //////////////////////////////////////
+    
+    private static void menu_ensino(String opcoes, SetorEnsino ensino, Aluno[] alunos) throws IOException {
         int opcao = menu(opcoes);
         long siape = 0;
         switch(opcao){
             
             case 1:
-                System.out.println("Nome Aluno: ");
-                String nomea = inputString();
-                System.out.println("Matrícula: ");
-                long matricula = inputLong();
-                System.out.println("Ano ingresso: ");
-                long anoingresso = inputLong();
-                ensino.novoAluno(nomea,matricula,anoingresso);
+                cadastra_aluno(ensino);
                 break;
                 
             case 2:
@@ -97,7 +97,7 @@ public class ProgramaPrincipal {
                 
                 if (c == null) {
                     System.err.println("Curso não encontrado. Cadastre-o.");
-                    cadastra_curso(ensino);
+                    c = cadastra_curso(ensino);
                 }
                 
                 System.out.println("Qual o Siape do professor?");
@@ -106,7 +106,7 @@ public class ProgramaPrincipal {
                 
                 if (p == null) {
                     System.err.println("Professor não encontrado. Cadastre-o.");
-                    cadastra_professor(ensino);
+                    p = cadastra_professor(ensino);
                 }
                 
                 System.out.println("Nome da nova disciplina: ");
@@ -125,29 +125,121 @@ public class ProgramaPrincipal {
 
     }
     
-    private static void cadastra_curso(SetorEnsino ensino){
-        System.out.println("Nome do curso: ");
-        String nomec = inputString();
-        System.out.println("PPC: ");
-        String ppc = inputString();
-        ensino.novoCurso(nomec, ppc);
+    ///////////////////////////// FUNÇÕES ALUNO ////////////////////////////////
+    
+    private static void cadastra_aluno(SetorEnsino ensino) throws IOException {
+        System.out.println("Nome Aluno: ");
+        String nome = inputString();
+        System.out.println("Matrícula: ");
+        long matricula = inputLong();
+        System.out.println("Ano ingresso: ");
+        long anoingresso = inputLong();
+        
+        if(ensino.novoAluno(nome,matricula,anoingresso)){
+            System.out.println("Aluno " + nome + " Cadastrado com sucesso");
+        } else {
+            System.out.println("Número máximo de alunos alcançado");
+        }
     }
     
-    private static void cadastra_professor(SetorEnsino ensino){
-        System.out.println("Nome do Professor ");
-        String nomep = inputString();
-        System.out.println("Siape: ");
-        long siape = inputLong();
-        System.out.println("Quantas áreas? ");
-        int qtd = inputInt();
-        System.out.println("Informe as áreas:");
-        String[] areas = new String[qtd];
-        for (int i = 0; i < qtd; i++) {
-            String a = inputString();
-            areas[i] = a;
+    ///////////////////////////// FUNÇÕES CURSO ////////////////////////////////
+    
+    private static Curso cadastra_curso(SetorEnsino ensino) throws IOException {
+        Curso c;
+
+        c = cria_curso(ensino);
+        if (ensino.novoCurso(c)) {
+            System.out.println("Curso " + c.getNome());
+        } else {
+            System.out.println("O limite de cursos foi alcançado.");
         }
-        ensino.novoProfessor(nomep, siape, areas);  
+        return c;
     }
+    
+    private static Curso cria_curso(SetorEnsino ensino) throws IOException {
+        Curso a = new Curso();
+
+        System.out.println("Nome da disciplina:");
+        a.setNome(inputString());
+        System.out.println("PPC:");
+        a.setPpc(inputString());
+        Disciplina[] disciplinas = recebe_disciplinas(ensino);
+
+        a.setDisciplinas(disciplinas);
+        return a;
+    }
+    
+    private static Disciplina[] recebe_disciplinas(SetorEnsino ensino) throws IOException {
+        Disciplina[] disciplinas = new Disciplina[40];
+
+        System.out.println("Digite [1] para cadastrar disciplina e [2] para terminar");
+        int op = inputInt();
+
+        for (int i = 0; op != 1 && i < disciplinas.length; i++) {
+            System.out.println("Qual o SIAPE do professor da disciplina?");
+            int siape = inputInt();
+            Professor professor = ensino.encontraProfessor(siape);
+
+            if (professor == null) {
+                System.err.println("O professor ainda não foi cadastrado. Informe seus dados.");
+                professor = cria_professor();
+                ensino.novoProfessor(professor);
+            }
+            disciplinas[i] = cria_disciplina(professor);
+            System.out.println("\n Digite [1] para terminar e [2] para cadastrar disciplina");
+            op = inputInt();
+        }
+        return disciplinas;
+    }
+    
+    ///////////////////////////// FUNÇÕES PROFESSOR ////////////////////////////
+    
+    private static Professor cadastra_professor(SetorEnsino ensino) throws IOException {
+        Professor p;
+        
+        p = cria_professor();       
+        if(ensino.novoProfessor(p)){
+            System.out.println("Professor " + p.getNome() + " Cadastrado com sucesso");
+        } else {
+            System.out.println("Número máximo de professores alcançado");
+        }
+        return p;
+    }
+    
+    private static Professor cria_professor() throws IOException {
+        Professor p = new Professor();
+        
+        System.out.println("Nome do Professor:");
+        p.setNome(inputString());
+        System.out.println("SIAPE:");
+        p.setSiape(inputInt());
+        System.out.println("Quantas áreas?");
+        int quantAreas = inputInt();
+        p.setAreas(new String[quantAreas]);
+        System.out.println("Informe as áreas:");
+        for (int i = 0; i < quantAreas; i++) {
+            if (p.getAreas() != null && p.getAreas()[i] != null) {
+                p.getAreas()[i] = inputString();
+            }
+        }
+        return p;
+    }
+    
+    ///////////////////////////// FUNÇÕES DISCIPLINA ///////////////////////////
+    
+    private static Disciplina cria_disciplina(Professor p) throws IOException, NumberFormatException {
+        System.out.println("Quantos alunos tem na turma?");
+        int quantAlunos = inputInt();
+        System.out.println("Qual o nome da disciplina?");
+        String nome_disciplina = inputString();
+        System.out.println("Qual o ano/semestre da disciplina?");
+        int ano = inputInt();
+        Disciplina d = new Disciplina(quantAlunos, p, nome_disciplina, ano);
+
+        return d;
+    }
+    
+    //////////////////////////// LEITORES //////////////////////////////////////
     
     private static String inputString(){
         Scanner sc = new Scanner(System.in);
