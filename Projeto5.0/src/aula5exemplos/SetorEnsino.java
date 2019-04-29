@@ -16,7 +16,7 @@ public class SetorEnsino {
     
     //////////////////////////// PROFESSOR /////////////////////////////////////
     
-    public boolean novoProfessor(String nome, long siape, String[] areas) {
+    public boolean novoProfessor(String nome, int siape, String[] areas) {
         for (int i = 0; i < professores.length; i++) {
             if (professores[i] == null) {
                 professores[i] = new Professor(nome, siape, areas);
@@ -36,7 +36,7 @@ public class SetorEnsino {
         return false;
     }
 
-    public boolean demitirProfessor(long siape) {
+    public boolean demitirProfessor(int siape) {
         for (int i = 0; i < professores.length; i++) {
             if (professores[i] != null && professores[i].getSiape() == siape) {
                 professores[i] = null;
@@ -46,10 +46,12 @@ public class SetorEnsino {
         return false;
     }
     
-    public Professor encontraProfessor(long siape) {
-        for (Professor prof : professores) {
-            if (prof.getSiape() == siape) {
-                return prof;
+    public Professor encontraProfessor(int siape) {
+        if (professores != null){
+            for (Professor prof : professores) {
+                if (prof != null && prof.getSiape() == siape) {
+                    return prof;
+                }
             }
         }
         return null;
@@ -110,6 +112,19 @@ public class SetorEnsino {
         }
         return false;
     }
+    
+    public boolean matricularAluno(Aluno a) {
+        for (Curso curso : cursos) {
+            if (curso != null && curso.getNome().equals(a.getCurso().getNome())) {
+                for (Disciplina disciplina : curso.getDisciplinas()) {
+                    a.setCurso(curso);
+                    disciplina.registrarAluno(a);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public boolean desligaAluno(long matricula) {
         for (int i = 0; i < alunos.length; i++) {
@@ -134,13 +149,12 @@ public class SetorEnsino {
         return null;
     }
     
-    public boolean criaDisciplina(String nome, int ano, long siape, String curso) {
+    public boolean novaDisciplina(Disciplina disciplina, Curso curso) {
         for (Curso c : cursos) {
-            if (c != null && c.getNome().equals(curso)) {
-                for (int j = 0; j < c.getDisciplinas().length; j++) {
-                    if (c.getDisciplinas()[j] == null) {
-                        c.getDisciplinas()[j] = new Disciplina(encontraProfessor(siape), nome, ano);
-                        System.out.println("Disciplina " + disciplinas[j].getNome() + "Cadastrada com sucesso");
+            if (c.equals(curso)) {
+                for (int i = 0; i < c.getDisciplinas().length; i++) {
+                    if (c.getDisciplinas()[i] == null) {
+                        c.getDisciplinas()[i] = disciplina;
                         return true;
                     }
                 }

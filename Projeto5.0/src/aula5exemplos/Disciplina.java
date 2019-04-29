@@ -28,6 +28,23 @@ public class Disciplina {
         return false;
     }
     
+    public boolean registrarAluno(String nome, Curso curso, int anoIngresso, long matricula) {
+        //Disciplina[] disciplinas = new Disciplina[40];
+        if (alunos != null){
+            for (int i = 0; i < alunos.length; i++) {
+                if (alunos[i] != null) {
+                    alunos[i] = new Aluno(nome, curso, anoIngresso, matricula);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+     public void registrarAluno(Aluno a) {
+        registrarAluno(a.getNome(), a.getCurso(), (int) a.getAnoIngresso(), a.getMatricula());
+    }
+    
     public  boolean removerAluno(String nome) {
         for ( int i = 0; i < alunos.length; i++) {
             if (alunos[i] != null && alunos[i].getNome().equals(nome)) {

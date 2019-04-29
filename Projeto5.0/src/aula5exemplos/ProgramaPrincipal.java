@@ -83,7 +83,8 @@ public class ProgramaPrincipal {
         switch(opcao){
             
             case 1:
-                cadastra_aluno(ensino);
+                novo_aluno(ensino,alunos);
+////////////// AINDA NÃO TA FUNCIONANDO ////////////////////////////////////////
                 break;
                 
             case 2:
@@ -100,23 +101,22 @@ public class ProgramaPrincipal {
                     c = cadastra_curso(ensino);
                 }
                 
-                System.out.println("Qual o Siape do professor?");
-                String siape_professor = inputString();
-                Professor p = ensino.encontraProfessor(siape);
+                System.out.println("Qual o Siape do professor da disciplina?");
+                int siape_professor = inputInt();
+                Professor p = ensino.encontraProfessor(siape_professor);
                 
                 if (p == null) {
                     System.err.println("Professor não encontrado. Cadastre-o.");
                     p = cadastra_professor(ensino);
+///////////////////////POR ALGUM MOTIVO NÃO PRINTA A CONFIRMAÇÃO DE CADASTRO ///
+                }           
+                       
+                if (cadastra_disciplina(ensino,c,p)) {
+                    System.out.println("Disciplina cadastrada com sucesso.");
+                } else {
+                    System.err.println("O limite de disciplinas foi excedido.");
                 }
-                
-                System.out.println("Nome da nova disciplina: ");
-                String nomed = inputString();
-                System.out.println("Ano da disciplina: ");
-                int ano = inputInt();
-        
-                ensino.criaDisciplina(nomed, ano, siape, nome_curso);
                 break;
-                
             case 4:
                 cadastra_professor(ensino);
                  
@@ -127,18 +127,49 @@ public class ProgramaPrincipal {
     
     ///////////////////////////// FUNÇÕES ALUNO ////////////////////////////////
     
-    private static void cadastra_aluno(SetorEnsino ensino) throws IOException {
-        System.out.println("Nome Aluno: ");
-        String nome = inputString();
-        System.out.println("Matrícula: ");
-        long matricula = inputLong();
-        System.out.println("Ano ingresso: ");
-        long anoingresso = inputLong();
-        
-        if(ensino.novoAluno(nome,matricula,anoingresso)){
-            System.out.println("Aluno " + nome + " Cadastrado com sucesso");
+    private static void novo_aluno(SetorEnsino ensino, Aluno[] alunos) throws IOException {
+        Aluno a = cadastra_aluno(ensino,alunos);
+
+        cadastra_disciplinas_aluno(ensino, a);
+    }
+    
+    private static Aluno cadastra_aluno(SetorEnsino ensino,Aluno[] alunos) throws IOException {
+        Aluno a = cria_aluno(ensino);
+
+////////// POR QUE FAZER DESTE MÉTODO AO INVÉS DE COMO SEMPRE //////////////////
+        for (int i = 0; i < alunos.length; i++) {
+            if (alunos[i] == null) {
+                alunos[i] = a;
+            }
+        }
+        return a;
+    }
+
+    private static Aluno cria_aluno(SetorEnsino ensino) throws IOException {
+        Aluno a = new Aluno();
+
+        System.out.println("Nome:");
+        a.setNome(inputString());
+        System.out.println("Curso:");
+        String nome_curso = inputString();
+        Curso c = ensino.encontraCurso(nome_curso);
+        a.setCurso(c);
+        System.out.println("Matricula:");
+        a.setMatricula(inputLong());
+        System.out.println("Ingresso:");
+        a.setAnoIngresso(inputInt());
+        a.setEhFormado(false);
+        return a;
+    }
+    
+    private static void cadastra_disciplinas_aluno(SetorEnsino ensino, Aluno a) throws IOException {
+        if (ensino.matricularAluno(a)) {
+            System.out.println("Aluno matriculado nas disciplinas do curso.");
         } else {
-            System.out.println("Número máximo de alunos alcançado");
+            System.err.println("Curso não encontrado. Cadastre-o.");
+            Curso c = cadastra_curso(ensino);
+
+            a.setCurso(c);
         }
     }
     
@@ -149,7 +180,7 @@ public class ProgramaPrincipal {
 
         c = cria_curso(ensino);
         if (ensino.novoCurso(c)) {
-            System.out.println("Curso " + c.getNome());
+            System.out.println("Curso " + c.getNome() + " cadastrado com sucesso");
         } else {
             System.out.println("O limite de cursos foi alcançado.");
         }
@@ -159,7 +190,7 @@ public class ProgramaPrincipal {
     private static Curso cria_curso(SetorEnsino ensino) throws IOException {
         Curso a = new Curso();
 
-        System.out.println("Nome da disciplina:");
+        System.out.println("Nome do curso");
         a.setNome(inputString());
         System.out.println("PPC:");
         a.setPpc(inputString());
@@ -173,9 +204,9 @@ public class ProgramaPrincipal {
         Disciplina[] disciplinas = new Disciplina[40];
 
         System.out.println("Digite [1] para cadastrar disciplina e [2] para terminar");
-        int op = inputInt();
+        int opcao = inputInt();
 
-        for (int i = 0; op != 1 && i < disciplinas.length; i++) {
+        for (int i = 1; opcao != 2 && i < disciplinas.length; i++) {
             System.out.println("Qual o SIAPE do professor da disciplina?");
             int siape = inputInt();
             Professor professor = ensino.encontraProfessor(siape);
@@ -186,8 +217,8 @@ public class ProgramaPrincipal {
                 ensino.novoProfessor(professor);
             }
             disciplinas[i] = cria_disciplina(professor);
-            System.out.println("\n Digite [1] para terminar e [2] para cadastrar disciplina");
-            op = inputInt();
+            System.out.println("\n Digite [1] para cadastrar disciplina e [2] para terminar");
+            opcao = inputInt();
         }
         return disciplinas;
     }
@@ -197,8 +228,9 @@ public class ProgramaPrincipal {
     private static Professor cadastra_professor(SetorEnsino ensino) throws IOException {
         Professor p;
         
-        p = cria_professor();       
-        if(ensino.novoProfessor(p)){
+        p = cria_professor();     
+        System.out.println("CRIOU O PROFESSOR SIM CARAI");
+        if (ensino.novoProfessor(p)){
             System.out.println("Professor " + p.getNome() + " Cadastrado com sucesso");
         } else {
             System.out.println("Número máximo de professores alcançado");
@@ -218,7 +250,7 @@ public class ProgramaPrincipal {
         p.setAreas(new String[quantAreas]);
         System.out.println("Informe as áreas:");
         for (int i = 0; i < quantAreas; i++) {
-            if (p.getAreas() != null && p.getAreas()[i] != null) {
+            if (p.getAreas() != null && p.getAreas()[i] == null) {
                 p.getAreas()[i] = inputString();
             }
         }
@@ -226,6 +258,12 @@ public class ProgramaPrincipal {
     }
     
     ///////////////////////////// FUNÇÕES DISCIPLINA ///////////////////////////
+    
+    private static boolean cadastra_disciplina(SetorEnsino ensino, Curso c, Professor p) throws IOException {
+        Disciplina d = cria_disciplina(p);
+
+        return ensino.novaDisciplina(d, c);
+    }
     
     private static Disciplina cria_disciplina(Professor p) throws IOException, NumberFormatException {
         System.out.println("Quantos alunos tem na turma?");

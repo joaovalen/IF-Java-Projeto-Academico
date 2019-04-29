@@ -4,7 +4,7 @@ package aula5exemplos;
 public class Professor {
     private String nome;
     private String areas[];
-    private long siape;
+    private int siape;
 
     public boolean novaArea(String area) {
         for (int i = 0; i < areas.length; i++) {
@@ -41,7 +41,7 @@ public class Professor {
     public long getSiape() {
         return siape;
     }
-    public void setSiape(long siape) {
+    public void setSiape(int siape) {
         this.siape = siape;
     }
     public void alterarNome(String novoNome) {
@@ -49,12 +49,12 @@ public class Professor {
     }
     
     
-     public Professor(String nome, long siape){
+     public Professor(String nome, int siape){
         this.nome = nome;
         this.siape = siape;
     }
     
-    public Professor(String nome,long siape,String[] areas){
+    public Professor(String nome,int siape,String[] areas){
         this.nome = nome;
         this.siape = siape;
         this.areas = areas;

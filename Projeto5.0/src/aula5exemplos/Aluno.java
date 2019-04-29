@@ -3,7 +3,7 @@ package aula5exemplos;
 
 public class Aluno {
     private String nome;
-    private String curso;
+    private Curso curso;
     private long anoIngresso;
     private boolean ehFormado;
     private long matricula;
@@ -22,10 +22,10 @@ public class Aluno {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public String getCurso() {
+    public Curso getCurso() {
         return curso;
     }
-    public void setCurso(String curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
     public long getAnoIngresso() {
@@ -52,7 +52,7 @@ public class Aluno {
     }
     
     public Aluno(String nome, 
-            String curso, 
+            Curso curso, 
             long anoIngresso, 
             long matricula){
         this.nome = nome;
@@ -71,4 +71,7 @@ public class Aluno {
         this.ehFormado = false;
     }
 
+    public Aluno(){
+        
+    }
 }
