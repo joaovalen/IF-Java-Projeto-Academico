@@ -16,6 +16,21 @@ public class SetorEnsino {
     
     //////////////////////////// PROFESSOR /////////////////////////////////////
     
+    public boolean novaArea(int pos_professor, String area){
+        if (professores != null) {
+            System.out.println("SIM ELE ENTROU ");
+            String areas[] = professores[pos_professor].getAreas();
+
+            for (int i = 0; areas != null && i < areas.length; i++) {
+                if (areas[i] == null) {
+                    areas[i] = area;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     public boolean novoProfessor(String nome, int siape, String[] areas) {
         for (int i = 0; i < professores.length; i++) {
             if (professores[i] == null) {
@@ -55,6 +70,37 @@ public class SetorEnsino {
             }
         }
         return null;
+    }
+    
+    public int login_professor(int siape) {
+        for (int i = 0; professores != null
+                && i < professores.length; i++) {
+            if (professores[i] != null
+                    && professores[i].getSiape() == siape) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public boolean alterarNota(String nome_disciplina, String nome_curso, String nome_aluno, float nova_nota) {
+        for (Curso curso : cursos) {
+            if (curso.getNome().equals(nome_curso)) {
+                for (Disciplina disciplina : curso.getDisciplinas()) {
+                    if (disciplina.getNome().equals(nome_disciplina)) {
+                        Aluno alunos[] = disciplina.getAlunos();
+
+                        for (int i = 0; i < alunos.length; i++) {
+                            if (alunos[i].getNome().equals(nome_aluno)) {
+                                disciplina.getNotas()[i] = nova_nota;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /////////////////////////// CURSO //////////////////////////////////////////
@@ -102,6 +148,16 @@ public class SetorEnsino {
     }
     
     /////////////////////////// ALUNO //////////////////////////////////////////
+    
+    public boolean novoAluno(Aluno aluno){
+         for (int i = 0; i < alunos.length; i++) {
+            if (alunos[i] == null) {
+                alunos[i] = aluno;
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean novoAluno(String nome, long matricula, long anoIngresso) {
         for (int i = 0; i < alunos.length; i++) {

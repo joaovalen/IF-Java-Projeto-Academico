@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-
-
 public class ProgramaPrincipal {
     
     //////////////////////////////// MENU PRINCIPAL ////////////////////////////
@@ -24,9 +22,21 @@ public class ProgramaPrincipal {
                 case 1:
                     menu_alunos("MENU 2: \n [1] Ver Cursos [2] Ver notas",ensino);
                     break;
+                    
                 case 2:
-                    menu_professor("MENU 2: \n [1] Dar Notas de uma disciplina [2] Alterar uma nota [3] Adicionar Área [4] Remover Área",ensino);
+                    System.out.println("Qual o seu número de siape, professor?");
+                    int siape = inputInt();
+                    int posicao_professor = ensino.login_professor(siape);
+                    
+                    if (posicao_professor != -1) {
+                       menu_professor("MENU 2: \n [1] Dar Notas de uma disciplina [2] Alterar uma nota [3] Adicionar Área [4] Remover Área",
+                               ensino,
+                               posicao_professor);
+                    } else {
+                       System.err.println("SIAPE inválido.");
+                    }
                     break;
+                    
                 case 3:
                     menu_ensino("MENU 2: \n [1] Cadastrar Aluno [2] Cadastrar Curso [3] Adicionar Disciplina ao Curso [4] Cadastrar Professor", ensino,alunos);
             }
@@ -60,7 +70,7 @@ public class ProgramaPrincipal {
 
     //////////////////////////// MENU PROFESSOR ////////////////////////////////
     
-    private static void menu_professor(String opcoes, SetorEnsino ensino) throws IOException {
+    private static void menu_professor(String opcoes,SetorEnsino ensino,int posicao_professor) throws IOException {
         int opcao = menu(opcoes);
         
         switch(opcao){
@@ -71,6 +81,18 @@ public class ProgramaPrincipal {
                 System.out.println("Informe o curso");
                 String curso = inputString();
                 ensino.darNotas(disciplina,curso);
+                break;
+                
+            case 2://alterar uma nota
+                cadastra_alteracao_nota(ensino);
+                break;
+                
+            case 3://adicionar área
+                cadastra_nova_area(ensino,posicao_professor);
+                break;
+                
+            case 4://remover área
+                break;
         }
 
     }
@@ -83,7 +105,7 @@ public class ProgramaPrincipal {
         switch(opcao){
             
             case 1:
-                novo_aluno(ensino,alunos);
+                cadastra_aluno(ensino,alunos);
 ////////////// AINDA NÃO TA FUNCIONANDO ////////////////////////////////////////
                 break;
                 
@@ -108,7 +130,6 @@ public class ProgramaPrincipal {
                 if (p == null) {
                     System.err.println("Professor não encontrado. Cadastre-o.");
                     p = cadastra_professor(ensino);
-///////////////////////POR ALGUM MOTIVO NÃO PRINTA A CONFIRMAÇÃO DE CADASTRO ///
                 }           
                        
                 if (cadastra_disciplina(ensino,c,p)) {
@@ -127,21 +148,16 @@ public class ProgramaPrincipal {
     
     ///////////////////////////// FUNÇÕES ALUNO ////////////////////////////////
     
-    private static void novo_aluno(SetorEnsino ensino, Aluno[] alunos) throws IOException {
-        Aluno a = cadastra_aluno(ensino,alunos);
-
-        cadastra_disciplinas_aluno(ensino, a);
-    }
-    
     private static Aluno cadastra_aluno(SetorEnsino ensino,Aluno[] alunos) throws IOException {
-        Aluno a = cria_aluno(ensino);
-
-////////// POR QUE FAZER DESTE MÉTODO AO INVÉS DE COMO SEMPRE //////////////////
-        for (int i = 0; i < alunos.length; i++) {
-            if (alunos[i] == null) {
-                alunos[i] = a;
-            }
+        Aluno a;
+        a = cria_aluno(ensino);
+        
+        if (ensino.novoAluno(a)){
+            System.out.println("Aluno " + a.getNome() + " cadastrado com sucesso");
+        }else {
+            System.out.println("Número máximo de alunos alcançado");
         }
+       
         return a;
     }
 
@@ -215,6 +231,7 @@ public class ProgramaPrincipal {
                 System.err.println("O professor ainda não foi cadastrado. Informe seus dados.");
                 professor = cria_professor();
                 ensino.novoProfessor(professor);
+                System.out.println("Professor " + professor.getNome() + " Cadastrado com sucesso");
             }
             disciplinas[i] = cria_disciplina(professor);
             System.out.println("\n Digite [1] para cadastrar disciplina e [2] para terminar");
@@ -229,7 +246,6 @@ public class ProgramaPrincipal {
         Professor p;
         
         p = cria_professor();     
-        System.out.println("CRIOU O PROFESSOR SIM CARAI");
         if (ensino.novoProfessor(p)){
             System.out.println("Professor " + p.getNome() + " Cadastrado com sucesso");
         } else {
@@ -247,7 +263,7 @@ public class ProgramaPrincipal {
         p.setSiape(inputInt());
         System.out.println("Quantas áreas?");
         int quantAreas = inputInt();
-        p.setAreas(new String[quantAreas]);
+        p.setAreas(new String[10]);
         System.out.println("Informe as áreas:");
         for (int i = 0; i < quantAreas; i++) {
             if (p.getAreas() != null && p.getAreas()[i] == null) {
@@ -256,6 +272,47 @@ public class ProgramaPrincipal {
         }
         return p;
     }
+    
+    private static void cadastra_nova_area(SetorEnsino ensino,int posicao_professor) throws IOException{
+        System.out.println("Qual a nova área, professor?");
+        String area = inputString();
+        if (ensino.novaArea(posicao_professor,area)) {
+            System.out.println("Área " + area + " cadastrada para o professor " + ensino.getProfessores()[posicao_professor].getNome());
+        } else {
+            System.err.println("O limite de áreas foi atingido para o professor com siape " + ensino.getProfessores()[posicao_professor].getSiape());
+        }
+    }
+    
+    private static void cadastra_alteracao_nota(SetorEnsino ensino){
+        System.out.println("Qual a disciplina?");
+        String disciplina = inputString();
+        System.out.println("Qual o curso?");
+        String curso = inputString();
+        System.out.println("Qual o nome do aluno?");
+        String nome_aluno = inputString();
+        System.out.println("Qual a sua nova nota?");
+        float nova_nota = inputFloat();
+
+                    if (ensino.alterarNota(disciplina, curso, nome_aluno, nova_nota)) {
+                        System.out.println("Nota "
+                                + nova_nota
+                                + " alterada para o aluno "
+                                + nome_aluno
+                                + " na disciplina "
+                                + disciplina
+                                + " do curso "
+                                + curso
+                                + ".");
+                    } else {
+                        System.err.println("Aluno "
+                                + nome_aluno
+                                + " do curso "
+                                + curso
+                                + " não foi encontrado. Ele não está matriculado na disciplina "
+                                + disciplina);
+                    }
+    }
+    
     
     ///////////////////////////// FUNÇÕES DISCIPLINA ///////////////////////////
     
@@ -289,9 +346,14 @@ public class ProgramaPrincipal {
         long x = sc.nextLong();
         return x;
     }
-     private static int inputInt(){
+    private static int inputInt(){
         Scanner sc = new Scanner(System.in);
         int x = sc.nextInt();
+        return x;
+    }
+    private static float inputFloat(){
+        Scanner sc = new Scanner(System.in);
+        float x = sc.nextFloat();
         return x;
     }
 }

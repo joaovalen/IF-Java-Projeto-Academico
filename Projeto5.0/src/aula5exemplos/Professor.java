@@ -3,7 +3,7 @@ package aula5exemplos;
 
 public class Professor {
     private String nome;
-    private String areas[];
+    private String areas[] = new String[10];
     private int siape;
 
     public boolean novaArea(String area) {
