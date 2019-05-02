@@ -106,7 +106,7 @@ public class ProgramaPrincipal {
             
             case 1:
                 cadastra_aluno(ensino,alunos);
-////////////// AINDA NÃO TA FUNCIONANDO ////////////////////////////////////////
+////////////// Fazer o registro do aluno nas disciplinas mais a frente /////////
                 break;
                 
             case 2:
@@ -151,6 +151,7 @@ public class ProgramaPrincipal {
     private static Aluno cadastra_aluno(SetorEnsino ensino,Aluno[] alunos) throws IOException {
         Aluno a;
         a = cria_aluno(ensino);
+        ensino.matricularAluno(a);
         
         if (ensino.novoAluno(a)){
             System.out.println("Aluno " + a.getNome() + " cadastrado com sucesso");
@@ -168,8 +169,14 @@ public class ProgramaPrincipal {
         a.setNome(inputString());
         System.out.println("Curso:");
         String nome_curso = inputString();
-        Curso c = ensino.encontraCurso(nome_curso);
-        a.setCurso(c);
+        Curso c;
+        if (ensino.encontraCurso(nome_curso) == null){
+            System.out.println("Curso não encontrado");
+            c = cadastra_curso(ensino);
+            a.setCurso(c);
+        } else {
+            a.setCurso(ensino.encontraCurso(nome_curso));
+        }
         System.out.println("Matricula:");
         a.setMatricula(inputLong());
         System.out.println("Ingresso:");
@@ -222,7 +229,7 @@ public class ProgramaPrincipal {
         System.out.println("Digite [1] para cadastrar disciplina e [2] para terminar");
         int opcao = inputInt();
 
-        for (int i = 1; opcao != 2 && i < disciplinas.length; i++) {
+        for (int i = 0; opcao != 2 && i < disciplinas.length; i++) {
             System.out.println("Qual o SIAPE do professor da disciplina?");
             int siape = inputInt();
             Professor professor = ensino.encontraProfessor(siape);
