@@ -13,8 +13,6 @@ import java.util.Scanner;
 // SENDO CADASTRADO CORRETAMENTE
 ////////////////////////////////////////////////////////////////////////////////
 // APÓS CONSERTAR ISSO ARRUMAR:
-// MENU PROFESSOR CASE 1
-// MENU PROFESSOR CASE 2
 // MENU ALUNO CASE 2
 
 public class ProgramaPrincipal {
@@ -285,6 +283,7 @@ public class ProgramaPrincipal {
             System.err.println("Não existem cursos cadastrados.");
         }
     }
+    
     ///////////////////////////// FUNÇÕES PROFESSOR ////////////////////////////
     
     private static Professor cadastra_professor(SetorEnsino ensino) throws IOException {

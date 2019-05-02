@@ -229,12 +229,12 @@ public class SetorEnsino {
             if (d == null) {
                 System.err.println("Disciplina " + disc + " não encontrada.");
             } else {
-                if (d != null && d.getAlunos() != null) {
+                if (d.getAlunos() != null) {
                     System.out.println("Informe as notas dos alunos: ");
                     float notas[] = new float[d.getAlunos().length];
                     int i = 0;
 
-                    while (i < d.getAlunos().length) {
+                    while (i < d.getAlunos().length && d.getAlunos()[i] != null) {
                         System.out.println("Nota do aluno " + d.getAlunos()[i].getNome());
                         notas[i] = inputFloat();
                         i++;
@@ -247,9 +247,9 @@ public class SetorEnsino {
     
     public void salvaNotas(float[] notas,Curso curso,Disciplina disciplina) {
         for (Curso c : cursos) {
-            if (c.equals(curso)) {
+            if (c != null && c.getNome().equals(curso.getNome())) {
                 for (Disciplina d : c.getDisciplinas()) {
-                    if (d.equals(disciplina)) {
+                    if (d != null && disciplina != null && d.getNome().equals(disciplina.getNome())) {
                         d.setNotas(notas);
                     }
                 }

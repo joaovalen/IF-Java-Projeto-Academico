@@ -30,7 +30,7 @@ public class Disciplina {
     
     public boolean registrarAluno(String nome, Curso curso, int anoIngresso, long matricula) {
             for (int i = 0; i < alunos.length; i++) {
-                if (alunos[i] != null) {
+                if (alunos[i] == null) {
                     alunos[i] = new Aluno(nome, curso, anoIngresso, matricula);
                     return true;
                 }
