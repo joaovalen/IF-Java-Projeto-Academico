@@ -173,7 +173,6 @@ public class SetorEnsino {
         for (Curso curso : cursos) {
             if (curso != null && curso.getNome().equals(a.getCurso().getNome())) {
                 for (Disciplina disciplina : curso.getDisciplinas()) {
-                    a.setCurso(curso);
                     disciplina.registrarAluno(a);
                     return true;
                 }

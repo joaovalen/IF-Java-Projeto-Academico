@@ -7,6 +7,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+// DUVIDAS:
+// NO MOMENTO DO CADASTRO DO ALUNO, AO PUXARMOS A FUNÇÃO ENSINO.MATRICULARALUNO
+// PARECE QUE DA TUDO CERTO MAS AO CHECAR ATRAVÉS DO DEPURADOR O ALUNO NÃO ESTÁ
+// SENDO CADASTRADO CORRETAMENTE
+////////////////////////////////////////////////////////////////////////////////
+// APÓS CONSERTAR ISSO ARRUMAR:
+// MENU PROFESSOR CASE 1
+// MENU PROFESSOR CASE 2
+// MENU ALUNO CASE 2
+
 public class ProgramaPrincipal {
     
     //////////////////////////////// MENU PRINCIPAL ////////////////////////////
@@ -56,15 +66,13 @@ public class ProgramaPrincipal {
         int opcao = menu(opcoes);
         switch (opcao) {
             case 1:
-                for (Curso c: ensino.getCursos()){
-                    if (c != null){
-                        String nome = c.getNome();
-                        System.out.println(nome);
-                    }else{
-                        System.out.println("Ainda não há cursos");
-                    }
-                }
-            
+                ver_cursos(ensino);
+                break;
+            case 2:
+                System.out.println("Qual a sua matrícula, caro discente?");
+                long matricula = inputInt();
+                //ver_notas(ensino, alunos, matricula);
+                break;
         }
     }
 
@@ -92,6 +100,14 @@ public class ProgramaPrincipal {
                 break;
                 
             case 4://remover área
+                System.out.println("Informe a área a ser removida: ");
+                String area = inputString();
+                
+                if (remover_area(ensino, posicao_professor, area)) {
+                    System.out.println("Área " + area + " foi removido com sucesso para o professor " + ensino.getProfessores()[posicao_professor].getNome());
+                } else {
+                    System.err.println("A área " + area + " não estava cadastrada para o professor com siape " + ensino.getProfessores()[posicao_professor].getSiape());
+                }
                 break;
         }
 
@@ -151,9 +167,9 @@ public class ProgramaPrincipal {
     private static Aluno cadastra_aluno(SetorEnsino ensino,Aluno[] alunos) throws IOException {
         Aluno a;
         a = cria_aluno(ensino);
-        ensino.matricularAluno(a);
         
-        if (ensino.novoAluno(a)){
+        
+        if (ensino.novoAluno(a) && ensino.matricularAluno(a)){
             System.out.println("Aluno " + a.getNome() + " cadastrado com sucesso");
         }else {
             System.out.println("Número máximo de alunos alcançado");
@@ -247,6 +263,28 @@ public class ProgramaPrincipal {
         return disciplinas;
     }
     
+    private static void ver_cursos(SetorEnsino ensino) {
+        Curso cursos[] = ensino.getCursos();
+
+        if (cursos != null) {
+            for (Curso curso : cursos) {
+                if (curso != null) {
+                    System.out.println("Curso " + curso.getNome());
+                    System.out.println("PPC: " + curso.getPpc());
+                    System.out.println("Disciplinas: ");
+                    if (curso.getDisciplinas() != null) {
+                        for (Disciplina d : curso.getDisciplinas()) {
+                            if (d != null) {
+                                System.out.println(d.getNome());
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            System.err.println("Não existem cursos cadastrados.");
+        }
+    }
     ///////////////////////////// FUNÇÕES PROFESSOR ////////////////////////////
     
     private static Professor cadastra_professor(SetorEnsino ensino) throws IOException {
@@ -318,6 +356,20 @@ public class ProgramaPrincipal {
                                 + " não foi encontrado. Ele não está matriculado na disciplina "
                                 + disciplina);
                     }
+    }
+    
+    private static boolean remover_area(SetorEnsino ensino, int pos_professor, String area) throws IOException{
+         if (ensino.getProfessores() != null) {
+            String areas[] = ensino.getProfessores()[pos_professor].getAreas();
+
+            for (int i = 0; areas != null && i < areas.length; i++) {
+                if (areas[i] != null && areas[i].equals(area)) {
+                    areas[i] = null;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     
