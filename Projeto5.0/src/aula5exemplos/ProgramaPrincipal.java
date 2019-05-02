@@ -17,38 +17,90 @@ import java.util.Scanner;
 
 public class ProgramaPrincipal {
     
+    private static final int TOTAL_ALUNOS = 1000;
+
+    private static final String DIRETOR_ENSINO = "Pâmela Perini";
+    private static final String COORDENADOR_ENSINO = "Vitor Valente";
+
+    private static final int OP_ALUNO = 1;
+    private static final int OP_PROFESSOR = 2;
+    private static final int OP_ENSINO = 3;
+    private static final int OP_SAIR = 4;
+
+    private static final int OP_ALUNO_VER_CURSOS = 1;
+    private static final int OP_ALUNO_VER_NOTAS = 2;
+    private static final int OP_ALUNO_VOLTAR = 3;
+
+    private static final int OP_PROFESSOR_DAR_NOTAS = 1;
+    private static final int OP_PROFESSOR_ALTERAR_NOTA = 2;
+    private static final int OP_PROFESSOR_ADICIONAR_AREA = 3;
+    private static final int OP_PROFESSOR_REMOVER_AREA = 4;
+    private static final int OP_PROFESSOR_VOLTAR = 5;
+
+    private static final int OP_ENSINO_NOVO_ALUNO = 1;
+    private static final int OP_ENSINO_NOVO_CURSO = 2;
+    private static final int OP_ENSINO_NOVA_DISCIPLINA = 3;
+    private static final int OP_ENSINO_NOVO_PROFESSOR = 4;
+    private static final int OP_ENSINO_VOLTAR = 5;
+
+    private static final int OP_DISCIPLINA_SAIR = 1;
+    private static final int OP_DISCIPLINA_NOVA = 2;
+
+    private static final int POSICAO_INVALIDA = -1;
+    
     //////////////////////////////// MENU PRINCIPAL ////////////////////////////
     
     public static void main(String[] args) throws IOException {
-        SetorEnsino ensino = new SetorEnsino("Pâmela Perini", "Vitor Valente");
-        Aluno[] alunos = new Aluno[1000];
+        SetorEnsino ensino = new SetorEnsino(DIRETOR_ENSINO, COORDENADOR_ENSINO);
+        Aluno[] alunos = new Aluno[TOTAL_ALUNOS];
         int opcao = 4;
         
         do {
-            opcao = menu("MENU 1: \n [1] Aluno \n [2] Professor \n [3] Setor de Ensino \n [4] Sair");
+            opcao = menu("MENU 1: \n "
+                    + "[" + OP_ALUNO + "] Aluno \n "
+                    + "[" + OP_PROFESSOR + "] Professor \n "
+                    + "[" + OP_ENSINO + "] Setor de Ensino \n "
+                    + "[" + OP_SAIR + "] Sair \n");
+            
             switch (opcao) {
-                case 1:
-                    menu_alunos("MENU 2: \n [1] Ver Cursos [2] Ver notas",ensino);
+                case OP_ALUNO:
+                    menu_alunos("MENU 2: \n "
+                            + "[" + OP_ALUNO_VER_CURSOS + "] Ver Cursos \n"
+                            + "[" + OP_ALUNO_VER_NOTAS + "] Ver notas \n"
+                            + "[" + OP_ALUNO_VOLTAR + "] Voltar",
+                            ensino);
                     break;
                     
-                case 2:
+                case OP_PROFESSOR:
                     System.out.println("Qual o seu número de siape, professor?");
                     int siape = inputInt();
                     int posicao_professor = ensino.login_professor(siape);
                     
                     if (posicao_professor != -1) {
-                       menu_professor("MENU 2: \n [1] Dar Notas de uma disciplina [2] Alterar uma nota [3] Adicionar Área [4] Remover Área",
-                               ensino,
-                               posicao_professor);
+                      menu_professor("MENU 2: \n "
+                                + "[" + OP_PROFESSOR_DAR_NOTAS + "] Dar Notas de uma disciplina \n "
+                                + "[" + OP_PROFESSOR_ALTERAR_NOTA + "] Alterar uma nota \n "
+                                + "[" + OP_PROFESSOR_ADICIONAR_AREA + "] Adicionar Área \n "
+                                + "[" + OP_PROFESSOR_REMOVER_AREA + "] Remover Área \n"
+                                + "[" + OP_PROFESSOR_VOLTAR + "] Voltar",
+                                ensino,
+                                posicao_professor);
                     } else {
                        System.err.println("SIAPE inválido.");
                     }
                     break;
                     
-                case 3:
-                    menu_ensino("MENU 2: \n [1] Cadastrar Aluno [2] Cadastrar Curso [3] Adicionar Disciplina ao Curso [4] Cadastrar Professor", ensino,alunos);
+                case OP_ENSINO:
+                    menu_ensino("MENU 2: \n "
+                            + "[" + OP_ENSINO_NOVO_ALUNO + "] Cadastrar Aluno \n "
+                            + "[" + OP_ENSINO_NOVO_CURSO + "] Cadastrar Curso \n "
+                            + "[" + OP_ENSINO_NOVA_DISCIPLINA + "] Adicionar Disciplina ao Curso \n "
+                            + "[" + OP_ENSINO_NOVO_PROFESSOR + "] Cadastrar Professor \n"
+                            + "[" + OP_ENSINO_VOLTAR + "] Voltar",
+                            ensino,
+                            alunos);
             }
-        } while (opcao != 4);
+        } while (opcao != OP_SAIR);
     }
 
     private static int menu(String opcoes) throws IOException {
@@ -63,10 +115,10 @@ public class ProgramaPrincipal {
     private static void menu_alunos(String opcoes,SetorEnsino ensino) throws IOException {
         int opcao = menu(opcoes);
         switch (opcao) {
-            case 1:
+            case OP_ALUNO_VER_CURSOS:
                 ver_cursos(ensino);
                 break;
-            case 2:
+            case OP_ALUNO_VER_NOTAS:
                 System.out.println("Qual a sua matrícula, caro discente?");
                 long matricula = inputInt();
                 //ver_notas(ensino, alunos, matricula);
@@ -93,7 +145,7 @@ public class ProgramaPrincipal {
                 cadastra_alteracao_nota(ensino);
                 break;
                 
-            case 3://adicionar área
+            case OP_PROFESSOR_ADICIONAR_AREA://adicionar área
                 cadastra_nova_area(ensino,posicao_professor);
                 break;
                 
@@ -118,16 +170,16 @@ public class ProgramaPrincipal {
         long siape = 0;
         switch(opcao){
             
-            case 1:
+            case OP_ENSINO_NOVO_ALUNO:
                 cadastra_aluno(ensino,alunos);
 ////////////// Fazer o registro do aluno nas disciplinas mais a frente /////////
                 break;
                 
-            case 2:
+            case OP_ENSINO_NOVO_CURSO:
                 cadastra_curso(ensino);
                 break;
              
-            case 3: 
+            case OP_ENSINO_NOVA_DISCIPLINA: 
                 System.out.println("Curso a ser adicionada");
                 String nome_curso = inputString();
                 Curso c = ensino.encontraCurso(nome_curso);
@@ -152,7 +204,7 @@ public class ProgramaPrincipal {
                     System.err.println("O limite de disciplinas foi excedido.");
                 }
                 break;
-            case 4:
+            case OP_ENSINO_NOVO_PROFESSOR:
                 cadastra_professor(ensino);
                  
         }
