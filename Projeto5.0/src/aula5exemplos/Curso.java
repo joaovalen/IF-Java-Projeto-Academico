@@ -2,6 +2,8 @@
 package aula5exemplos;
 
 public class Curso {
+    
+    public static final int MAX_DISCIPLINAS = 40;
     private String nome;
     private String ppc;
     private Disciplina disciplinas[];
@@ -49,7 +51,7 @@ public class Curso {
      public Curso(String nome,String ppc,Disciplina[] disciplinas){
         this.nome = nome;
         this.ppc = ppc;
-        this.disciplinas = disciplinas;
+        this.disciplinas = new Disciplina[MAX_DISCIPLINAS];
     }
     
     public Curso(String nome,String ppc){
@@ -57,8 +59,9 @@ public class Curso {
         this.ppc = ppc;
     }
     
-    public Curso(){
-        
+    public Curso(){   
     }
+    
+    
 }
 

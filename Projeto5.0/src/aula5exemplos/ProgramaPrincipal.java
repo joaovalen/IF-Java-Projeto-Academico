@@ -7,13 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-// DUVIDAS:
-// NO MOMENTO DO CADASTRO DO ALUNO, AO PUXARMOS A FUNÇÃO ENSINO.MATRICULARALUNO
-// PARECE QUE DA TUDO CERTO MAS AO CHECAR ATRAVÉS DO DEPURADOR O ALUNO NÃO ESTÁ
-// SENDO CADASTRADO CORRETAMENTE
-////////////////////////////////////////////////////////////////////////////////
-// APÓS CONSERTAR ISSO ARRUMAR:
-// MENU ALUNO CASE 2
+// Lembretes
+// ctrl + shift + minus = fecha todas as função
 
 public class ProgramaPrincipal {
     
@@ -22,21 +17,25 @@ public class ProgramaPrincipal {
     private static final String DIRETOR_ENSINO = "Pâmela Perini";
     private static final String COORDENADOR_ENSINO = "Vitor Valente";
 
+///////////////////////// ESTATICOS MAIN ///////////////////////////////////////
     private static final int OP_ALUNO = 1;
     private static final int OP_PROFESSOR = 2;
     private static final int OP_ENSINO = 3;
     private static final int OP_SAIR = 4;
 
+///////////////////////// ESTATICOS MENU ALUNO /////////////////////////////////
     private static final int OP_ALUNO_VER_CURSOS = 1;
     private static final int OP_ALUNO_VER_NOTAS = 2;
     private static final int OP_ALUNO_VOLTAR = 3;
 
+///////////////////////// ESTATICOS MENU PROFESSOR /////////////////////////////
     private static final int OP_PROFESSOR_DAR_NOTAS = 1;
     private static final int OP_PROFESSOR_ALTERAR_NOTA = 2;
     private static final int OP_PROFESSOR_ADICIONAR_AREA = 3;
     private static final int OP_PROFESSOR_REMOVER_AREA = 4;
     private static final int OP_PROFESSOR_VOLTAR = 5;
 
+//////////////////////// ESTATICOS MENU ENSINO /////////////////////////////////
     private static final int OP_ENSINO_NOVO_ALUNO = 1;
     private static final int OP_ENSINO_NOVO_CURSO = 2;
     private static final int OP_ENSINO_NOVA_DISCIPLINA = 3;
@@ -76,7 +75,7 @@ public class ProgramaPrincipal {
                     int siape = inputInt();
                     int posicao_professor = ensino.login_professor(siape);
                     
-                    if (posicao_professor != -1) {
+                    if (posicao_professor != POSICAO_INVALIDA) {
                       menu_professor("MENU 2: \n "
                                 + "[" + OP_PROFESSOR_DAR_NOTAS + "] Dar Notas de uma disciplina \n "
                                 + "[" + OP_PROFESSOR_ALTERAR_NOTA + "] Alterar uma nota \n "
@@ -133,7 +132,7 @@ public class ProgramaPrincipal {
         
         switch(opcao){
             
-            case 1:
+            case OP_PROFESSOR_DAR_NOTAS:
                 System.out.println("Informe a disciplina");
                 String disciplina = inputString();
                 System.out.println("Informe o curso");
@@ -141,7 +140,7 @@ public class ProgramaPrincipal {
                 ensino.darNotas(disciplina,curso);
                 break;
                 
-            case 2://alterar uma nota
+            case OP_PROFESSOR_ALTERAR_NOTA://alterar uma nota
                 cadastra_alteracao_nota(ensino);
                 break;
                 
@@ -149,7 +148,7 @@ public class ProgramaPrincipal {
                 cadastra_nova_area(ensino,posicao_professor);
                 break;
                 
-            case 4://remover área
+            case OP_PROFESSOR_REMOVER_AREA://remover área
                 System.out.println("Informe a área a ser removida: ");
                 String area = inputString();
                 
@@ -292,10 +291,12 @@ public class ProgramaPrincipal {
     private static Disciplina[] recebe_disciplinas(SetorEnsino ensino) throws IOException {
         Disciplina[] disciplinas = new Disciplina[40];
 
-        System.out.println("Digite [1] para cadastrar disciplina e [2] para terminar");
+        System.out.println("Digite [" + OP_DISCIPLINA_NOVA + "] para cadastrar disciplina "
+                           + "e [" + OP_DISCIPLINA_SAIR + "2] para terminar");
+        
         int opcao = inputInt();
 
-        for (int i = 0; opcao != 2 && i < disciplinas.length; i++) {
+        for (int i = 0; opcao != OP_DISCIPLINA_SAIR && i < disciplinas.length; i++) {
             System.out.println("Qual o SIAPE do professor da disciplina?");
             int siape = inputInt();
             Professor professor = ensino.encontraProfessor(siape);

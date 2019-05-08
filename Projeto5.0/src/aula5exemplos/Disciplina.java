@@ -2,6 +2,9 @@
 package aula5exemplos;
 
 public class Disciplina {
+    
+    public static final int MAX_ALUNOS = 30;
+    
     private String nome;
     private Aluno alunos[];
     private Professor professor;
@@ -56,8 +59,7 @@ public class Disciplina {
         return registrarNota(nota, nome);
     } 
     
-    
-     public String getNome() {
+    public String getNome() {
         return nome;
     }
     public void setNome(String nome) {
@@ -89,12 +91,12 @@ public class Disciplina {
     }
     
     
-     public Disciplina(Professor professor,String nome,int ano){
+    public Disciplina(Professor professor,String nome,int ano){
         this.professor = professor;
         this.nome = nome;
         this.ano = ano;
-        this.alunos = new Aluno[30];
-        this.notas = new float[30];
+        this.alunos = new Aluno[MAX_ALUNOS];
+        this.notas = new float[MAX_ALUNOS];
     }
     
     public Disciplina(int quantAlunos,Professor professor,String nome,int ano){
@@ -103,6 +105,11 @@ public class Disciplina {
         this.professor = professor;
         this.nome = nome;
         this.ano = ano;
+    }
+    
+    public Disciplina() {
+        alunos = new Aluno[MAX_ALUNOS];
+        notas = new float[MAX_ALUNOS];
     }
     
 }

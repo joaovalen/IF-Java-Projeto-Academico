@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class SetorEnsino {
+    
+    public static final int POSICAO_INVALIDA = -1;
+    public static final int MAX_PROFESSORES = 60;
+    public static final int MAX_CURSOS = 12;
+    public static final int MAX_ALUNOS = 500;
 
     private Disciplina disciplinas[];
     private Aluno[] alunos;
@@ -80,7 +85,7 @@ public class SetorEnsino {
                 return i;
             }
         }
-        return -1;
+        return POSICAO_INVALIDA;
     }
     
     public boolean alterarNota(String nome_disciplina, String nome_curso, String nome_aluno, float nova_nota) {
@@ -301,17 +306,17 @@ public class SetorEnsino {
      public SetorEnsino(String diretor, String coordenador) {
         this.coordenador = coordenador;
         this.diretor = diretor;
-        this.alunos = new Aluno[2000];
-        this.professores = new Professor[80];
-        this.cursos = new Curso[200];
+        this.alunos = new Aluno[MAX_ALUNOS];
+        this.professores = new Professor[MAX_PROFESSORES];
+        this.cursos = new Curso[MAX_CURSOS];
     }
 
     public SetorEnsino(Curso[] cursos,
             Professor[] professores,
             String diretor,
             String coordenador) {
-        this.cursos = cursos;
-        this.professores = professores;
+        this.cursos = new Curso[MAX_CURSOS];
+        this.professores = new Professor[MAX_PROFESSORES];
         this.diretor = diretor;
         this.coordenador = coordenador;
     }
