@@ -2,9 +2,12 @@
 package aula5exemplos;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class SetorEnsino {
+public class SetorEnsino implements Serializable {
     
     public static final int POSICAO_INVALIDA = -1;
     public static final int MAX_PROFESSORES = 60;
@@ -240,7 +243,7 @@ public class SetorEnsino {
                     int i = 0;
 
                     while (i < d.getAlunos().length && d.getAlunos()[i] != null) {
-                        System.out.println("Nota do aluno " + d.getAlunos()[i].getNome());
+                        System.out.println("Nota do aluno " + d.getAlunos()[i].toString());
                         notas[i] = inputFloat();
                         i++;
                     }
@@ -340,4 +343,59 @@ public class SetorEnsino {
          int x = sc.nextInt();
          return x;
      }
+      
+    //////////////////////////// equals e toString /////////////////////////////
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 61 * hash + Arrays.deepHashCode(this.cursos);
+        hash = 61 * hash + Arrays.deepHashCode(this.professores);
+        hash = 61 * hash + Objects.hashCode(this.diretor);
+        hash = 61 * hash + Objects.hashCode(this.coordenador);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SetorEnsino other = (SetorEnsino) obj;
+        if (!Objects.equals(this.diretor, other.diretor)) {
+            return false;
+        }
+        return (Objects.equals(this.coordenador, other.coordenador));
+    }
+
+    @Override
+    public String toString() {
+        String nomes_cursos = "";
+
+        for (Curso d : cursos) {
+            if (d != null) {
+                nomes_cursos += d.toString() + "\n";
+            }
+        }
+        String nomes_professores = "";
+
+        for (Professor e : professores) {
+            if (e != null) {
+                nomes_professores += e.toString() + "\n";
+            }
+        }
+        return "\n cursos: "
+                + nomes_cursos
+                + "\n professores: "
+                + nomes_professores
+                + "\n diretor: "
+                + diretor
+                + "\n coordenador: " + coordenador;
+    }
 }

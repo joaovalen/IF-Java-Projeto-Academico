@@ -1,7 +1,10 @@
 
 package aula5exemplos;
 
-public class Aluno {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Aluno implements Serializable, Comparable<Aluno> {
     private String nome;
     private Curso curso;
     private long anoIngresso;
@@ -74,5 +77,57 @@ public class Aluno {
     public Aluno(){
         
     }
+    
+    ///////////////////////////// Equals e toString ////////////////////////////
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null
+                && getClass() == obj.getClass()) {
+            // POR QUE ESSE FINAL???????????????????????????????????????????
+            final Aluno other = (Aluno) obj;
+
+            if (this.matricula == other.matricula
+                    && this.nome.equals(other.nome)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    ///// PRA QUE O HASH CODE ???????????????????????????????????????????
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.nome);
+        hash = 79 * hash + (int) (this.matricula ^ (this.matricula >>> 32));
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        String formado = "está formado.";
+
+        if (!ehFormado) {
+            formado = "não " + formado;
+        }
+        String nome_curso = "Nenhum";
+        if (curso != null) {
+            nome_curso = curso.getNome();
+        }
+        return "\n nome: " + nome
+                + "\n curso: " + nome_curso
+                + "\n anoIngresso: " + anoIngresso
+                + "\n matricula: " + matricula
+                + "\n " + formado;
+    }
+
+    @Override
+    public int compareTo(Aluno outro) {
+        Long mat1 = this.matricula;
+        Long mat2 = outro.matricula;
+
+        return this.nome.compareTo(outro.nome) + mat1.compareTo(mat2);
+    }
+
  
 }

@@ -1,6 +1,8 @@
 
 package aula5exemplos;
 
+import java.util.Objects;
+
 public class Curso {
     
     public static final int MAX_DISCIPLINAS = 40;
@@ -62,6 +64,44 @@ public class Curso {
     public Curso(){   
     }
     
+    ///////////////////////////// equals e toString ////////////////////////////
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.nome);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null
+                && getClass() == obj.getClass()) {
+            final Curso other = (Curso) obj;
+
+            if (this.nome.equals(other.nome)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        String disciplina = "";
+
+        for (Disciplina d : disciplinas) {
+            if (d != null) {
+                disciplina += d.toString() + "\n";
+            }
+        }
+        return "\n nome: "
+                + nome
+                + "\n ppc: "
+                + ppc
+                + "\n disciplinas: \n"
+                + disciplina;
+    }
     
 }
 

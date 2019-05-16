@@ -1,6 +1,8 @@
 
 package aula5exemplos;
 
+import java.util.Objects;
+
 public class Disciplina {
     
     public static final int MAX_ALUNOS = 30;
@@ -112,5 +114,46 @@ public class Disciplina {
         notas = new float[MAX_ALUNOS];
     }
     
+    ////////////////////////// equals e toString ///////////////////////////////
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null
+                && getClass() == obj.getClass()) {
+            final Disciplina other = (Disciplina) obj;
+
+            if (this.professor.equals(other.professor)
+                    && this.nome.equals(other.nome)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.professor);
+        hash = 97 * hash + Objects.hashCode(this.nome);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        String notas_alunos = "";
+
+        for (int i = 0; i < alunos.length; i++) {
+            Aluno aluno = alunos[i];
+            float nota = notas[i];
+
+            if (aluno != null) {
+                notas_alunos += aluno.toString() + " Nota: " + nota + "\n";
+            }
+        }
+        return "\n professor: " + professor
+                + "\n nome: " + nome
+                + "\n ano: " + ano
+                + "\n Notas: " + notas_alunos;
+    }
 }
     

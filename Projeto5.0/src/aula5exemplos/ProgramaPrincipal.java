@@ -3,8 +3,13 @@ package aula5exemplos;
 import aula5exemplos.Aluno;
 import aula5exemplos.Professor;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.Scanner;
 
 // Lembretes
@@ -42,8 +47,8 @@ public class ProgramaPrincipal {
     private static final int OP_ENSINO_NOVO_PROFESSOR = 4;
     private static final int OP_ENSINO_VOLTAR = 5;
 
-    private static final int OP_DISCIPLINA_SAIR = 1;
-    private static final int OP_DISCIPLINA_NOVA = 2;
+    private static final int OP_DISCIPLINA_SAIR = 2;
+    private static final int OP_DISCIPLINA_NOVA = 1;
 
     private static final int POSICAO_INVALIDA = -1;
     
@@ -67,7 +72,7 @@ public class ProgramaPrincipal {
                             + "[" + OP_ALUNO_VER_CURSOS + "] Ver Cursos \n"
                             + "[" + OP_ALUNO_VER_NOTAS + "] Ver notas \n"
                             + "[" + OP_ALUNO_VOLTAR + "] Voltar",
-                            ensino);
+                            ensino, alunos);
                     break;
                     
                 case OP_PROFESSOR:
@@ -111,7 +116,7 @@ public class ProgramaPrincipal {
     }
 
     ////////////////////////////// MENU ALUNOS /////////////////////////////////
-    private static void menu_alunos(String opcoes,SetorEnsino ensino) throws IOException {
+    private static void menu_alunos(String opcoes,SetorEnsino ensino, Aluno alunos[]) throws IOException {
         int opcao = menu(opcoes);
         switch (opcao) {
             case OP_ALUNO_VER_CURSOS:
@@ -120,7 +125,8 @@ public class ProgramaPrincipal {
             case OP_ALUNO_VER_NOTAS:
                 System.out.println("Qual a sua matrícula, caro discente?");
                 long matricula = inputInt();
-                //ver_notas(ensino, alunos, matricula);
+                
+                ver_notas(ensino, alunos, matricula);
                 break;
         }
     }
@@ -153,7 +159,7 @@ public class ProgramaPrincipal {
                 String area = inputString();
                 
                 if (remover_area(ensino, posicao_professor, area)) {
-                    System.out.println("Área " + area + " foi removido com sucesso para o professor " + ensino.getProfessores()[posicao_professor].getNome());
+                    System.out.println("Área " + area + " foi removido com sucesso para o professor " + ensino.getProfessores()[posicao_professor].toString());
                 } else {
                     System.err.println("A área " + area + " não estava cadastrada para o professor com siape " + ensino.getProfessores()[posicao_professor].getSiape());
                 }
@@ -261,6 +267,52 @@ public class ProgramaPrincipal {
         }
     }
     
+    private static void ver_notas(SetorEnsino ensino, Aluno alunos[], long matricula) {
+        boolean aluno_nao_encontrado = true;
+
+        for (Aluno aluno : alunos) {
+            if (aluno != null && aluno.getMatricula() == matricula) {//aluno matriculado
+                aluno_nao_encontrado = false;
+                Curso cursos[] = ensino.getCursos();
+
+                if (cursos != null) {
+                    for (Curso curso : cursos) {
+                        Disciplina disciplinas[] = curso.getDisciplinas();
+
+                        if (disciplinas != null) {
+                            for (Disciplina disciplina : disciplinas) {
+                                if (disciplina != null) {
+                                    Aluno a[] = disciplina.getAlunos();
+                                    int i = 0;
+
+                                    while (i != a.length
+                                            && a[i] != null
+                                            && a[i].getMatricula() != matricula) {
+                                        i++;
+                                    }
+                                    if (disciplina.getNotas() != null) {
+                                        float nota = disciplina.getNotas()[i];
+
+                                        System.out.println("A nota do aluno "
+                                                + a[i].toString()
+                                                + " é de "
+                                                + nota
+                                                + " na disciplina "
+                                                + disciplina.toString());
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (aluno_nao_encontrado) {
+            System.err.println("Aluno não matriculado no sistema.");
+        }
+    }
+    
     ///////////////////////////// FUNÇÕES CURSO ////////////////////////////////
     
     private static Curso cadastra_curso(SetorEnsino ensino) throws IOException {
@@ -268,7 +320,7 @@ public class ProgramaPrincipal {
 
         c = cria_curso(ensino);
         if (ensino.novoCurso(c)) {
-            System.out.println("Curso " + c.getNome() + " cadastrado com sucesso");
+            System.out.println("Curso " + c.toString() + " cadastrado com sucesso");
         } else {
             System.out.println("O limite de cursos foi alcançado.");
         }
@@ -292,7 +344,7 @@ public class ProgramaPrincipal {
         Disciplina[] disciplinas = new Disciplina[40];
 
         System.out.println("Digite [" + OP_DISCIPLINA_NOVA + "] para cadastrar disciplina "
-                           + "e [" + OP_DISCIPLINA_SAIR + "2] para terminar");
+                           + "e [" + OP_DISCIPLINA_SAIR + "] para terminar");
         
         int opcao = inputInt();
 
@@ -344,7 +396,7 @@ public class ProgramaPrincipal {
         
         p = cria_professor();     
         if (ensino.novoProfessor(p)){
-            System.out.println("Professor " + p.getNome() + " Cadastrado com sucesso");
+            System.out.println("Professor " + p.toString() + " Cadastrado com sucesso");
         } else {
             System.out.println("Número máximo de professores alcançado");
         }
@@ -374,7 +426,7 @@ public class ProgramaPrincipal {
         System.out.println("Qual a nova área, professor?");
         String area = inputString();
         if (ensino.novaArea(posicao_professor,area)) {
-            System.out.println("Área " + area + " cadastrada para o professor " + ensino.getProfessores()[posicao_professor].getNome());
+            System.out.println("Área " + area + " cadastrada para o professor " + ensino.getProfessores()[posicao_professor].toString());
         } else {
             System.err.println("O limite de áreas foi atingido para o professor com siape " + ensino.getProfessores()[posicao_professor].getSiape());
         }
