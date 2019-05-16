@@ -1,9 +1,10 @@
 
 package aula5exemplos;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Professor {
+public class Professor implements Serializable {
     private String nome;
     private String areas[] = new String[10];
     private int siape;

@@ -1,9 +1,10 @@
 
 package aula5exemplos;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Curso {
+public class Curso implements Serializable {
     
     public static final int MAX_DISCIPLINAS = 40;
     private String nome;

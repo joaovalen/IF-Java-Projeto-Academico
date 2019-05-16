@@ -1,5 +1,6 @@
 package aula5exemplos;
 
+import aula5exemplos.Arquivo;
 import aula5exemplos.Aluno;
 import aula5exemplos.Professor;
 import java.io.BufferedReader;
@@ -55,24 +56,31 @@ public class ProgramaPrincipal {
     //////////////////////////////// MENU PRINCIPAL ////////////////////////////
     
     public static void main(String[] args) throws IOException {
-        SetorEnsino ensino = new SetorEnsino(DIRETOR_ENSINO, COORDENADOR_ENSINO);
-        Aluno[] alunos = new Aluno[TOTAL_ALUNOS];
+        SetorEnsino ensino = Arquivo.obtem_ensino();
+        Aluno[] alunos = Arquivo.obtem_alunos();
         int opcao = 4;
         
         do {
+            try {
             opcao = menu("MENU 1: \n "
                     + "[" + OP_ALUNO + "] Aluno \n "
                     + "[" + OP_PROFESSOR + "] Professor \n "
                     + "[" + OP_ENSINO + "] Setor de Ensino \n "
                     + "[" + OP_SAIR + "] Sair \n");
-            
+            } catch (IOException e){
+                Arquivo.escreve_log("Erro ao ler opção do menu 1");
+            }
             switch (opcao) {
                 case OP_ALUNO:
+                    try{
                     menu_alunos("MENU 2: \n "
                             + "[" + OP_ALUNO_VER_CURSOS + "] Ver Cursos \n"
                             + "[" + OP_ALUNO_VER_NOTAS + "] Ver notas \n"
                             + "[" + OP_ALUNO_VOLTAR + "] Voltar",
                             ensino, alunos);
+                    } catch (IOException e){
+                        Arquivo.escreve_log("Erro ao ler opção do menu do aluno");
+                    }
                     break;
                     
                 case OP_PROFESSOR:
@@ -105,6 +113,8 @@ public class ProgramaPrincipal {
                             alunos);
             }
         } while (opcao != OP_SAIR);
+        Arquivo.salva_alunos(alunos);
+        Arquivo.salva_ensino(ensino);
     }
 
     private static int menu(String opcoes) throws IOException {

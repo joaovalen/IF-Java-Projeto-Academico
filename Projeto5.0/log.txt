@@ -1,0 +1,8 @@
+Thu May 16 16:43:22 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 16:44:50 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 16:47:11 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 17:11:22 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 17:14:40 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 17:28:44 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 17:31:09 BRT 2019: Erro ao criar o arquivo ensino.bin
+Thu May 16 17:32:06 BRT 2019: Erro ao criar o arquivo ensino.bin
