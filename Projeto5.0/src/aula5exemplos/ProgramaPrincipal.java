@@ -113,8 +113,8 @@ public class ProgramaPrincipal {
                             alunos);
             }
         } while (opcao != OP_SAIR);
-        Arquivo.salva_alunos(alunos);
         Arquivo.salva_ensino(ensino);
+        Arquivo.salva_alunos(alunos);
     }
 
     private static int menu(String opcoes) throws IOException {
@@ -136,7 +136,7 @@ public class ProgramaPrincipal {
                 System.out.println("Qual a sua matrícula, caro discente?");
                 long matricula = inputInt();
                 
-                ver_notas(ensino, alunos, matricula);
+                ensino.ver_notas(matricula);
                 break;
         }
     }
@@ -277,51 +277,6 @@ public class ProgramaPrincipal {
         }
     }
     
-    private static void ver_notas(SetorEnsino ensino, Aluno alunos[], long matricula) {
-        boolean aluno_nao_encontrado = true;
-
-        for (Aluno aluno : alunos) {
-            if (aluno != null && aluno.getMatricula() == matricula) {//aluno matriculado
-                aluno_nao_encontrado = false;
-                Curso cursos[] = ensino.getCursos();
-
-                if (cursos != null) {
-                    for (Curso curso : cursos) {
-                        Disciplina disciplinas[] = curso.getDisciplinas();
-
-                        if (disciplinas != null) {
-                            for (Disciplina disciplina : disciplinas) {
-                                if (disciplina != null) {
-                                    Aluno a[] = disciplina.getAlunos();
-                                    int i = 0;
-
-                                    while (i != a.length
-                                            && a[i] != null
-                                            && a[i].getMatricula() != matricula) {
-                                        i++;
-                                    }
-                                    if (disciplina.getNotas() != null) {
-                                        float nota = disciplina.getNotas()[i];
-
-                                        System.out.println("A nota do aluno "
-                                                + a[i].toString()
-                                                + " é de "
-                                                + nota
-                                                + " na disciplina "
-                                                + disciplina.toString());
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (aluno_nao_encontrado) {
-            System.err.println("Aluno não matriculado no sistema.");
-        }
-    }
     
     ///////////////////////////// FUNÇÕES CURSO ////////////////////////////////
     
