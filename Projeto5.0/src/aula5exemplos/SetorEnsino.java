@@ -155,6 +155,28 @@ public class SetorEnsino implements Serializable {
         return null;
     }
     
+    public void ver_cursos() {
+        if (cursos != null) {
+            for (Curso curso : cursos) {
+                if (curso != null) {
+                    System.out.println("Curso " + curso.getNome());
+                    System.out.println("PPC: " + curso.getPpc());
+                    System.out.println("Disciplinas: ");
+                    if (curso.getDisciplinas() != null) {
+                        for (Disciplina d : curso.getDisciplinas()) {
+                            if (d != null) {
+                                System.out.println(d.getNome());
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            System.err.println("Não existem cursos cadastrados.");
+        }
+    }
+    
+    
     /////////////////////////// ALUNO //////////////////////////////////////////
     
     public boolean novoAluno(Aluno aluno){
@@ -203,42 +225,47 @@ public class SetorEnsino implements Serializable {
         return false;
     }
     
-    public void ver_notas(long matricula) {
-        boolean aluno_nao_encontrado = true;
-
+    public Aluno encontraAluno(long matricula){
         for (Aluno aluno : alunos) {
-            if (aluno != null && aluno.getMatricula() == matricula) {//aluno matriculado
-                aluno_nao_encontrado = false;
-                Curso cursos[] = this.getCursos();
+            if (aluno != null && aluno.getMatricula() == matricula){
+            return aluno;
+            }
+        }return null;
+    }
+    
+    public void ver_notas(long matricula) {
+        boolean aluno_nao_encontrado = true;  
+        Aluno aluno = encontraAluno(matricula);
+        
+        if (aluno != null){
+            aluno_nao_encontrado = false;
+            Curso curso = aluno.getCurso();
+            if (cursos != null) {
+                Disciplina disciplinas[] = curso.getDisciplinas();
+                if (disciplinas != null) {
+                    for (Disciplina disciplina : disciplinas) {
+                        if (disciplina != null) {
+                            Aluno a[] = disciplina.getAlunos();
+                            int i = 0;
 
-                if (cursos != null) {
-                    for (Curso curso : cursos) {
-                        Disciplina disciplinas[] = curso.getDisciplinas();
+                            while (i != a.length
+                                    && a[i] != null
+                                    && a[i].getMatricula() != matricula) {
+                                i++;
+                            }
+                            if (disciplina.getNotas() != null) {
+                                if (a[i] != null){
+                                float nota = disciplina.getNotas()[i];
 
-                        if (disciplinas != null) {
-                            for (Disciplina disciplina : disciplinas) {
-                                if (disciplina != null) {
-                                    Aluno a[] = disciplina.getAlunos();
-                                    int i = 0;
-
-                                    while (i != a.length
-                                            && a[i] != null
-                                            && a[i].getMatricula() != matricula) {
-                                        i++;
-                                    }
-                                    if (disciplina.getNotas() != null) {
-                                        float nota = disciplina.getNotas()[i];
-
-                                        System.out.println("A nota do aluno "
-                                                + a[i].toString()
-                                                + " é de "
-                                                + nota
-                                                + " na disciplina "
-                                                + disciplina.toString());
-                                    }
-                                    break;
+                                System.out.println("A nota do aluno "
+                                        + a[i].toString()
+                                        + " é de "
+                                        + nota
+                                        + " na disciplina "
+                                        + disciplina.toString());
                                 }
                             }
+                            break;
                         }
                     }
                 }

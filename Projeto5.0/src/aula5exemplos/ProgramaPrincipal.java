@@ -130,7 +130,7 @@ public class ProgramaPrincipal {
         int opcao = menu(opcoes);
         switch (opcao) {
             case OP_ALUNO_VER_CURSOS:
-                ver_cursos(ensino);
+                ensino.ver_cursos();
                 break;
             case OP_ALUNO_VER_NOTAS:
                 System.out.println("Qual a sua matrícula, caro discente?");
@@ -329,29 +329,6 @@ public class ProgramaPrincipal {
             opcao = inputInt();
         }
         return disciplinas;
-    }
-    
-    private static void ver_cursos(SetorEnsino ensino) {
-        Curso cursos[] = ensino.getCursos();
-
-        if (cursos != null) {
-            for (Curso curso : cursos) {
-                if (curso != null) {
-                    System.out.println("Curso " + curso.getNome());
-                    System.out.println("PPC: " + curso.getPpc());
-                    System.out.println("Disciplinas: ");
-                    if (curso.getDisciplinas() != null) {
-                        for (Disciplina d : curso.getDisciplinas()) {
-                            if (d != null) {
-                                System.out.println(d.getNome());
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            System.err.println("Não existem cursos cadastrados.");
-        }
     }
     
     ///////////////////////////// FUNÇÕES PROFESSOR ////////////////////////////
