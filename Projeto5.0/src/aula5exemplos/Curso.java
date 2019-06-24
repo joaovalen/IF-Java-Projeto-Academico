@@ -4,7 +4,7 @@ package aula5exemplos;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Curso implements Serializable {
+public class Curso implements Serializable, Comparable {
     
     public static final int MAX_DISCIPLINAS = 40;
     private String nome;
@@ -103,6 +103,9 @@ public class Curso implements Serializable {
                 + "\n disciplinas: \n"
                 + disciplina;
     }
-    
-}
 
+    @Override
+    public int compareTo(Object o) {
+        return this.nome.compareTo(((Curso) o).nome);
+    }
+}

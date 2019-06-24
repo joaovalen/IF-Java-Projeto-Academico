@@ -4,7 +4,7 @@ package aula5exemplos;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Professor implements Serializable {
+public class Professor implements Serializable, Comparable {
     private String nome;
     private String areas[] = new String[10];
     private int siape;
@@ -111,6 +111,14 @@ public class Professor implements Serializable {
                 + siape
                 + "\n areas: "
                 + nomes_areas;
+    }
+
+    @Override
+    public int compareTo(Object outro) {
+        Integer s1 = this.siape;
+        int s2 = ((Professor)outro).siape;
+        
+        return this.nome.compareTo(((Professor) outro).nome) + s1.compareTo(s2);
     }
     
 }
