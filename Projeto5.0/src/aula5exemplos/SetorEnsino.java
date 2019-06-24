@@ -3,6 +3,7 @@ package aula5exemplos;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -241,7 +242,7 @@ public class SetorEnsino implements Serializable {
             aluno_nao_encontrado = false;
             Curso curso = aluno.getCurso();
             if (cursos != null) {
-                Disciplina disciplinas[] = curso.getDisciplinas();
+                ArrayList<Disciplina> disciplinas = curso.getDisciplinas();
                 if (disciplinas != null) {
                     for (Disciplina disciplina : disciplinas) {
                         if (disciplina != null) {

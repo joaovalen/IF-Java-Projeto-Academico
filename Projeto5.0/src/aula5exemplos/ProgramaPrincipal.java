@@ -3,6 +3,7 @@ package aula5exemplos;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 // Lembretes
@@ -291,20 +292,34 @@ public class ProgramaPrincipal {
         a.setNome(inputString());
         System.out.println("PPC:");
         a.setPpc(inputString());
-        Disciplina[] disciplinas = recebe_disciplinas(ensino);
+        ArrayList<Disciplina> disciplinas = recebe_disciplinas(ensino);
 
         a.setDisciplinas(disciplinas);
         return a;
     }
     
-    private static Disciplina[] recebe_disciplinas(SetorEnsino ensino) throws IOException {
-        Disciplina[] disciplinas = new Disciplina[40];
+    private static ArrayList<Disciplina> recebe_disciplinas(SetorEnsino ensino) throws IOException {
+        ArrayList<Disciplina> disciplinas = new ArrayList();
 
         System.out.println("Digite [" + OP_DISCIPLINA_NOVA + "] para cadastrar disciplina "
                            + "e [" + OP_DISCIPLINA_SAIR + "] para terminar");
         
         int opcao = inputInt();
-
+/*for (Iterator<Disciplina> iterator = disciplinas.iterator(); iterator.hasNext();) {
+            Disciplina d = iterator.next(); AAAAAAAAAA
+        AAAAAAAAAA
+        AAAAAAAA
+        AAAAAAAAA
+        AAAAAAA
+        AAAAAAAAA
+        AAAAAAAA
+        AAAAAAAA
+        AAAAAAAAA
+        AAAAAAAAA
+        AAAAAAAAA
+        AAAAAAAAAA
+        AAAAAAAAA
+        COMO PERCORRER A ARRAY LIST TESTANDO SEU FINAL*/
         for (int i = 0; opcao != OP_DISCIPLINA_SAIR && i < disciplinas.length; i++) {
             System.out.println("Qual o SIAPE do professor da disciplina?");
             int siape = inputInt();
@@ -316,7 +331,7 @@ public class ProgramaPrincipal {
                 ensino.novoProfessor(professor);
                 System.out.println("Professor " + professor.getNome() + " Cadastrado com sucesso");
             }
-            disciplinas[i] = cria_disciplina(professor);
+            disciplinas.add(cria_disciplina(professor));
             System.out.println("\n Digite [1] para cadastrar disciplina e [2] para terminar");
             opcao = inputInt();
         }

@@ -2,6 +2,8 @@
 package aula5exemplos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class Curso implements Serializable, Comparable {
@@ -9,25 +11,21 @@ public class Curso implements Serializable, Comparable {
     public static final int MAX_DISCIPLINAS = 40;
     private String nome;
     private String ppc;
-    private Disciplina disciplinas[];
+    private ArrayList<Disciplina> disciplinas;
      
     public boolean novaDisciplina(String nome, int ano, Professor professor) {
-        for ( int i = 0; i < disciplinas.length; i++) {
-            if (disciplinas[i] != null) {
-                disciplinas[i] = new Disciplina(professor,nome,ano);
-                return true;
-            }
-        }
-    return false;
+        return disciplinas.add(new Disciplina(professor,nome,ano));
+                
     }
-    
+        
     public boolean removerDisciplina(String nome) {
-        for ( int i = 0; i < disciplinas.length; i++) {
-            if (disciplinas[i] != null &&
-            disciplinas[i].getNome().equals(nome)) {
-            disciplinas[i] = null;
-            return true;
-            }
+        for (Iterator<Disciplina> iterator = disciplinas.iterator(); iterator.hasNext();) {
+            Disciplina d = iterator.next();
+        
+            if (d != null && d.getNome().equals(nome)){
+                iterator.remove();
+                return true;
+            }   
         }
     return false;
     }
@@ -44,22 +42,23 @@ public class Curso implements Serializable, Comparable {
     public void setPpc(String ppc) {
         this.ppc = ppc;
     }
-    public Disciplina[] getDisciplinas() {
+    public ArrayList<Disciplina> getDisciplinas() {
         return disciplinas;
     }
-    public void setDisciplinas(Disciplina[] disciplinas) {
+    public void setDisciplinas(ArrayList<Disciplina> disciplinas) {
         this.disciplinas = disciplinas;
     }
     
-     public Curso(String nome,String ppc,Disciplina[] disciplinas){
-        this.nome = nome;
+     public Curso(String nome,String ppc,ArrayList<Disciplina> disciplinas){
+        this.nome = nome;   
         this.ppc = ppc;
-        this.disciplinas = new Disciplina[MAX_DISCIPLINAS];
+        this.disciplinas = disciplinas;
     }
     
     public Curso(String nome,String ppc){
         this.nome = nome;
         this.ppc = ppc;
+        this.disciplinas = new ArrayList();
     }
     
     public Curso(){   
