@@ -15,7 +15,6 @@ public class SetorEnsino implements Serializable {
     public static final int MAX_CURSOS = 12;
     public static final int MAX_ALUNOS = 500;
 
-    private Disciplina disciplinas[];
     private Aluno[] alunos;
     private Curso cursos[];
     private Professor professores[];
@@ -293,14 +292,10 @@ public class SetorEnsino implements Serializable {
     public boolean novaDisciplina(Disciplina disciplina, Curso curso) {
         for (Curso c : cursos) {
             if (c.equals(curso)) {
-                for (int i = 0; i < c.getDisciplinas().length; i++) {
-                    if (c.getDisciplinas()[i] == null) {
-                        c.getDisciplinas()[i] = disciplina;
-                        return true;
-                    }
-                }
+                c.novaDisciplina(disciplina);
+                return true;
+              }
             }
-        }
         return false;
     }
     
@@ -345,12 +340,7 @@ public class SetorEnsino implements Serializable {
     
     ////////////////////////// GET/SET /////////////////////////////////////////
     
-    public Disciplina[] getDisciplinas() {
-        return disciplinas;
-    }
-    public void setDisciplinas(Disciplina[] disciplinas) {
-        this.disciplinas = disciplinas;
-    }
+  
     public Aluno[] getAlunos() {
         return alunos;
     }

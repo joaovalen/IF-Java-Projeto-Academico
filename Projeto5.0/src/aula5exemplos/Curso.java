@@ -15,7 +15,10 @@ public class Curso implements Serializable, Comparable {
      
     public boolean novaDisciplina(String nome, int ano, Professor professor) {
         return disciplinas.add(new Disciplina(professor,nome,ano));
-                
+    }
+    
+    public boolean novaDisciplina(Disciplina disciplina){
+        return disciplinas.add(disciplina);
     }
         
     public boolean removerDisciplina(String nome) {

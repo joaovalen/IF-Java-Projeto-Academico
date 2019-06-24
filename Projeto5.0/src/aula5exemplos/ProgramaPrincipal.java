@@ -305,22 +305,7 @@ public class ProgramaPrincipal {
                            + "e [" + OP_DISCIPLINA_SAIR + "] para terminar");
         
         int opcao = inputInt();
-/*for (Iterator<Disciplina> iterator = disciplinas.iterator(); iterator.hasNext();) {
-            Disciplina d = iterator.next(); AAAAAAAAAA
-        AAAAAAAAAA
-        AAAAAAAA
-        AAAAAAAAA
-        AAAAAAA
-        AAAAAAAAA
-        AAAAAAAA
-        AAAAAAAA
-        AAAAAAAAA
-        AAAAAAAAA
-        AAAAAAAAA
-        AAAAAAAAAA
-        AAAAAAAAA
-        COMO PERCORRER A ARRAY LIST TESTANDO SEU FINAL*/
-        for (int i = 0; opcao != OP_DISCIPLINA_SAIR && i < disciplinas.length; i++) {
+        for (int i = 0; opcao != OP_DISCIPLINA_SAIR; i++) {
             System.out.println("Qual o SIAPE do professor da disciplina?");
             int siape = inputInt();
             Professor professor = ensino.encontraProfessor(siape);
