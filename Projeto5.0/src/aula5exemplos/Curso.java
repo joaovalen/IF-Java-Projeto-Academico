@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class Curso implements Serializable, Comparable {
     
-    public static final int MAX_DISCIPLINAS = 40;
     private String nome;
     private String ppc;
     private ArrayList<Disciplina> disciplinas;

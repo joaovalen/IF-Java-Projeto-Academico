@@ -2,6 +2,10 @@
 package aula5exemplos;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 public class Disciplina implements Serializable, Comparable {
@@ -9,39 +13,31 @@ public class Disciplina implements Serializable, Comparable {
     public static final int MAX_ALUNOS = 30;
     
     private String nome;
-    private Aluno alunos[];
+    private HashMap<Aluno, Float> alunos;
     private Professor professor;
     private int ano;
-    private float notas[];
     
-    public boolean registrarNota(float nota, String nome){
-        for(int i = 0; i< notas.length; i++){
-            if (alunos[i] !=null && alunos[i].getNome().equals(nome)) {
-                notas[i] = nota;
-                return true; 
-            }
-        }
-        return false;
+    // COMO FAZER PRA TESTAR SE FUNCIONOU 
+    //
+    //
+    //
+    //
+    //
+    
+    public boolean registrarNota(float nota, Aluno aluno){
+       alunos.replace(aluno, nota);
+       return true;
     } 
 
     public boolean novoAluno(String nome){
-        for ( int i = 0; i < alunos.length; i++) {
-            if (alunos[i]==null) {
-                alunos[i] = new Aluno(nome);
-                return true;
-            }
-        }
-        return false;
+        return alunos.put(
+        new Aluno(nome),0f) != null; 
     }
     
+    
     public boolean registrarAluno(String nome, Curso curso, int anoIngresso, long matricula) {
-            for (int i = 0; i < alunos.length; i++) {
-                if (alunos[i] == null) {
-                    alunos[i] = new Aluno(nome, curso, anoIngresso, matricula);
-                    return true;
-                }
-        }
-        return false;
+        return alunos.put(
+        new Aluno(nome, curso, anoIngresso, matricula),0f) != null; 
     }
     
      public void registrarAluno(Aluno a) {
@@ -49,18 +45,28 @@ public class Disciplina implements Serializable, Comparable {
     }
     
     public  boolean removerAluno(String nome) {
-        for ( int i = 0; i < alunos.length; i++) {
-            if (alunos[i] != null && alunos[i].getNome().equals(nome)) {
-                alunos[i] = null;
+        /// COMO FUNCIONA O ITERATOR E PAH 
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        for (Iterator<Aluno> iterator = alunos.keySet().iterator(); iterator.hasNext();) {
+            Aluno aluno = iterator.next();
+            
+            if (aluno.getNome().equals(nome)) {
+                iterator.remove();
                 return true;
             }
         }
         return false;
     }
-    
-    public boolean alterarNota(float nota, String nome) {
-        return registrarNota(nota, nome);
-    } 
     
     public String getNome() {
         return nome;
@@ -74,18 +80,30 @@ public class Disciplina implements Serializable, Comparable {
     public void setAno(int ano) {
         this.ano = ano;
     }
-    public float[] getNotas() {
-        return notas;
+    //////////////////////////// O QUE SERIA O COLECTION //////////////////
+    //
+    //
+    // O SET NÃO É NECESSÁRIO CORRETO
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    
+    public Collection<Float> getNotas() {
+        return alunos.values();
     }
-    public void setNotas(float[] notas) {
-         this.notas = notas;
-    }
-    public Aluno[] getAlunos() {
+    
+    public HashMap<Aluno, Float> getAlunos() {
          return alunos;
     }
-    public void setAlunos(Aluno[] alunos) {
-         this.alunos = alunos;
-    }
+    
     public Professor getProfessor() {
          return professor;
     }
@@ -98,21 +116,18 @@ public class Disciplina implements Serializable, Comparable {
         this.professor = professor;
         this.nome = nome;
         this.ano = ano;
-        this.alunos = new Aluno[MAX_ALUNOS];
-        this.notas = new float[MAX_ALUNOS];
+        this.alunos = new HashMap();
     }
     
     public Disciplina(int quantAlunos,Professor professor,String nome,int ano){
-        this.alunos = new Aluno[quantAlunos];
-        this.notas = new float[quantAlunos];
+        this.alunos = new HashMap();
         this.professor = professor;
         this.nome = nome;
         this.ano = ano;
     }
     
     public Disciplina() {
-        alunos = new Aluno[MAX_ALUNOS];
-        notas = new float[MAX_ALUNOS];
+        alunos = new HashMap();
     }
     
     ////////////////////////// equals e toString ///////////////////////////////
@@ -138,14 +153,23 @@ public class Disciplina implements Serializable, Comparable {
         hash = 97 * hash + Objects.hashCode(this.nome);
         return hash;
     }
-
+// COMO FUNCIONA O FOR DESSE TO STRING 
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
     @Override
     public String toString() {
         String notas_alunos = "";
 
-        for (int i = 0; i < alunos.length; i++) {
-            Aluno aluno = alunos[i];
-            float nota = notas[i];
+        for (Map.Entry<Aluno, Float> entry : alunos.entrySet()) {
+            Aluno aluno = entry.getKey();
+            Float nota = entry.getValue();
 
             if (aluno != null) {
                 notas_alunos += aluno.toString() + " Nota: " + nota + "\n";

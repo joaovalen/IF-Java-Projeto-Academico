@@ -96,14 +96,9 @@ public class SetorEnsino implements Serializable {
             if (curso.getNome().equals(nome_curso)) {
                 for (Disciplina disciplina : curso.getDisciplinas()) {
                     if (disciplina.getNome().equals(nome_disciplina)) {
-                        Aluno alunos[] = disciplina.getAlunos();
+                        Aluno aluno = encontraAluno(nome_aluno);
 
-                        for (int i = 0; i < alunos.length; i++) {
-                            if (alunos[i].getNome().equals(nome_aluno)) {
-                                disciplina.getNotas()[i] = nova_nota;
-                                return true;
-                            }
-                        }
+                        disciplina.registrarNota(nova_nota, aluno);
                     }
                 }
             }
@@ -233,6 +228,14 @@ public class SetorEnsino implements Serializable {
         }return null;
     }
     
+     public Aluno encontraAluno(String nome){
+        for (Aluno aluno : alunos) {
+            if (aluno != null && aluno.getNome() == nome){
+            return aluno;
+            }
+        }return null;
+    }
+    
     public void ver_notas(long matricula) {
         boolean aluno_nao_encontrado = true;  
         Aluno aluno = encontraAluno(matricula);
@@ -245,27 +248,14 @@ public class SetorEnsino implements Serializable {
                 if (disciplinas != null) {
                     for (Disciplina disciplina : disciplinas) {
                         if (disciplina != null) {
-                            Aluno a[] = disciplina.getAlunos();
-                            int i = 0;
-
-                            while (i != a.length
-                                    && a[i] != null
-                                    && a[i].getMatricula() != matricula) {
-                                i++;
-                            }
-                            if (disciplina.getNotas() != null) {
-                                if (a[i] != null){
-                                float nota = disciplina.getNotas()[i];
+                           float nota = disciplina.getAlunos().get(aluno);
 
                                 System.out.println("A nota do aluno "
-                                        + a[i].toString()
+                                        + aluno.getNome()
                                         + " é de "
                                         + nota
                                         + " na disciplina "
-                                        + disciplina.toString());
-                                }
-                            }
-                            break;
+                                        + disciplina.toString());            
                         }
                     }
                 }
