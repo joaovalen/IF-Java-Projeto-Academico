@@ -25,8 +25,14 @@ public class Disciplina implements Serializable, Comparable {
     //
     
     public boolean registrarNota(float nota, Aluno aluno){
-       alunos.replace(aluno, nota);
-       return true;
+        for (Map.Entry<Aluno, Float> iterador: alunos.entrySet()) {
+            System.out.println("TA PERCORRENDO O HASH");
+            if (iterador.getKey().equals(aluno)){
+                alunos.replace(iterador.getKey(), nota);
+                return true;
+            }
+       }
+        return false;
     } 
 
     public boolean novoAluno(String nome){

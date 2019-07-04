@@ -95,16 +95,26 @@ public class SetorEnsino implements Serializable {
     }
     
     public boolean alterarNota(String nome_disciplina, String nome_curso, String nome_aluno, float nova_nota) {
+        System.out.println("VARIÁVEL NOME_CURSO: " + nome_curso);
+        System.out.println(cursos[0].getNome());
         for (Curso curso : cursos) {
-            if (curso.getNome().equals(nome_curso)) {
-                for (Disciplina disciplina : curso.getDisciplinas()) {
-                    if (disciplina.getNome().equals(nome_disciplina)) {
-                        Aluno aluno = encontraAluno(nome_aluno);
-
-                        disciplina.registrarNota(nova_nota, aluno);
+            System.out.println("PERCORRENDO CURSOS");
+            if (curso != null){
+                System.out.println("TESTANDO SE É NULO");
+                if (curso.getNome().equals(nome_curso)) {
+                    System.out.println("TESTANDO O NOME");
+                    for (Disciplina disciplina : curso.getDisciplinas()) {
+                        if (disciplina.getNome().equals(nome_disciplina)) {
+                            Aluno aluno = encontraAluno(nome_aluno);
+                            System.out.println("ENTROU NO REGISTRO DE NOTA");
+                            if(disciplina.registrarNota(nova_nota, aluno)){
+                                System.out.println("RETORNOU VERDADEIRO");
+                                return true;
+                            }   
+                            
+                        }
                     }
-                }
-            }
+            }   }
         }
         return false;
     }
@@ -233,7 +243,7 @@ public class SetorEnsino implements Serializable {
     
      public Aluno encontraAluno(String nome){
         for (Aluno aluno : alunos) {
-            if (aluno != null && aluno.getNome() == nome){
+            if (aluno != null && aluno.getNome().equals(nome)){
             return aluno;
             }
         }return null;
