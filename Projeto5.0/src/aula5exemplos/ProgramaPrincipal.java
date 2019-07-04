@@ -10,9 +10,9 @@ import java.util.Scanner;
 // ctrl + shift + minus = fecha todas as função
 
 public class ProgramaPrincipal {
-    
+ 
+//////////////////////// ATRIBUTOS ESTÁTICOS ///////////////////////////////////    
     private static final int TOTAL_ALUNOS = 1000;
-
     private static final String DIRETOR_ENSINO = "Pâmela Perini";
     private static final String COORDENADOR_ENSINO = "Vitor Valente";
 
@@ -180,7 +180,6 @@ public class ProgramaPrincipal {
             
             case OP_ENSINO_NOVO_ALUNO:
                 cadastra_aluno(ensino,alunos);
-////////////// Fazer o registro do aluno nas disciplinas mais a frente /////////
                 break;
                 
             case OP_ENSINO_NOVO_CURSO:
@@ -367,14 +366,23 @@ public class ProgramaPrincipal {
     }
     
     private static void cadastra_alteracao_nota(SetorEnsino ensino){
-        System.out.println("Qual a disciplina?");
-        String disciplina = inputString();
-        System.out.println("Qual o curso?");
-        String curso = inputString();
-        System.out.println("Qual o nome do aluno?");
-        String nome_aluno = inputString();
-        System.out.println("Qual a sua nova nota?");
-        float nova_nota = inputFloat();
+        String disciplina = "";
+        String curso = "";
+        String nome_aluno = "";
+        float nova_nota = 0;
+        try{
+            System.out.println("Qual a disciplina?");
+            disciplina = inputString();
+            System.out.println("Qual o curso?");
+            curso = inputString();
+            System.out.println("Qual o nome do aluno?");
+            nome_aluno = inputString();
+            System.out.println("Qual a sua nova nota?");
+            nova_nota = inputFloat();
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+       
 
                     if (ensino.alterarNota(disciplina, curso, nome_aluno, nova_nota)) {
                         System.out.println("Nota "
@@ -433,10 +441,10 @@ public class ProgramaPrincipal {
     
     //////////////////////////// LEITORES //////////////////////////////////////
     
-    private static String inputString(){
-        Scanner sc = new Scanner(System.in);
-        String x = sc.nextLine();
-        return x;
+    private static String inputString() throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String input = reader.readLine();
+        return input;
     }
     private static long inputLong(){
         Scanner sc = new Scanner(System.in);
