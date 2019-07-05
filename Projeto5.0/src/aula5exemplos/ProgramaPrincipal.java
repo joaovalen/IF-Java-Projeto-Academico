@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 // Lembretes
 // ctrl + shift + minus = fecha todas as função
@@ -446,20 +445,20 @@ public class ProgramaPrincipal {
         String input = reader.readLine();
         return input;
     }
-    private static long inputLong(){
-        Scanner sc = new Scanner(System.in);
-        long x = sc.nextLong();
-        return x;
+    private static long inputLong() throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        Long input = Long.parseLong(reader.readLine());
+        return input; 
     }
-    private static int inputInt(){
-        Scanner sc = new Scanner(System.in);
-        int x = sc.nextInt();
-        return x;
+    private static int inputInt() throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int input = Integer.parseInt(reader.readLine());
+        return input; 
     }
-    private static float inputFloat(){
-        Scanner sc = new Scanner(System.in);
-        float x = sc.nextFloat();
-        return x;
+    private static float inputFloat() throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        float input = Float.parseFloat(reader.readLine());
+        return input; 
     }
 }
     
