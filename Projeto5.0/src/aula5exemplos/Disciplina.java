@@ -83,7 +83,7 @@ public class Disciplina implements Serializable, Comparable {
     //////////////////////////// O QUE SERIA O COLECTION //////////////////
     //
     //
-    // O SET NÃO É NECESSÁRIO CORRETO
+    // O SET NÃO É NECESSÁRIO CORRETO?
     //
     //
     //

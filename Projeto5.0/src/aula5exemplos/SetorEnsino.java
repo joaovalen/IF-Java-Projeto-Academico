@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 
 public class SetorEnsino implements Serializable {
     
@@ -248,14 +251,21 @@ public class SetorEnsino implements Serializable {
                 if (disciplinas != null) {
                     for (Disciplina disciplina : disciplinas) {
                         if (disciplina != null) {
-                           float nota = disciplina.getAlunos().get(aluno);
-
-                                System.out.println("A nota do aluno "
+                            for (Map.Entry<Aluno, Float> w: disciplina.getAlunos().entrySet()) {
+                                if (w.getKey().equals(aluno)){
+                                     System.out.println("A nota do aluno "
                                         + aluno.getNome()
                                         + " é de "
-                                        + nota
+                                        + w.getValue()
                                         + " na disciplina "
-                                        + disciplina.toString());            
+                                        + disciplina.getNome());    
+                                }
+                              
+                    
+                           
+
+                                       
+                            }
                         }
                     }
                 }
@@ -302,32 +312,17 @@ public class SetorEnsino implements Serializable {
             } else {
                 if (d.getAlunos() != null) {
                     System.out.println("Informe as notas dos alunos: ");
-                    float notas[] = new float[d.getAlunos().length];
-                    int i = 0;
-
-                    while (i < d.getAlunos().length && d.getAlunos()[i] != null) {
-                        System.out.println("Nota do aluno " + d.getAlunos()[i].toString());
-                        notas[i] = inputFloat();
-                        i++;
+                    for (Map.Entry<Aluno, Float> w: d.getAlunos().entrySet()) {
+                        System.out.println("Informe a nota do aluno " + w.getKey());
+                        float nota = inputFloat();
+                        d.getAlunos().replace(w.getKey(), nota);
                     }
-                    salvaNotas(notas, curso, d);
                 }
             }  
         }       
     }
     
-    public void salvaNotas(float[] notas,Curso curso,Disciplina disciplina) {
-        for (Curso c : cursos) {
-            if (c != null && c.getNome().equals(curso.getNome())) {
-                for (Disciplina d : c.getDisciplinas()) {
-                    if (d != null && disciplina != null && d.getNome().equals(disciplina.getNome())) {
-                        d.setNotas(notas);
-                    }
-                }
-            }
-        }
-    }
-    
+  
     ////////////////////////// GET/SET /////////////////////////////////////////
     
   
