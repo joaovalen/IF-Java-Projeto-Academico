@@ -1,5 +1,5 @@
 
-package aula5exemplos;
+package projeto_academico;
 
 import java.io.Serializable;
 import java.util.Objects;

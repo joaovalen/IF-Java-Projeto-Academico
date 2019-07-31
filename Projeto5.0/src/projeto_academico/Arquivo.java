@@ -1,7 +1,7 @@
 /*
  * Classe auxiliar com funções para uso de arquivos.
  */
-package aula5exemplos;
+package projeto_academico;
 
 import java.io.BufferedWriter;
 import java.io.EOFException;
